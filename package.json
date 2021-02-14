@@ -33,14 +33,14 @@
   },
   "name": "fstb",
   "author": "Mikhail Sokolov",
-  "module": "dist/fstb1.esm.js",
+  "module": "dist/fstb.esm.js",
   "size-limit": [
     {
-      "path": "dist/fstb1.cjs.production.min.js",
+      "path": "dist/fstb.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/fstb1.esm.js",
+      "path": "dist/fstb.esm.js",
       "limit": "10 KB"
     }
   ],
@@ -51,5 +51,6 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^4.1.5"
-  }
+  },
+  "dependencies": {}
 }
