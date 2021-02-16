@@ -29,7 +29,7 @@ class FSDir {
     const dir = await opendir(this.path);
     const res = [] as T[];
     for await (const dirent of dir) {
-      console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`)
+      console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`);
       if (dirent.isFile()) {
         res.push(await cb(new FSFile(join(this.path, dirent.name))));
       }
