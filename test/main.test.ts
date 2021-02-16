@@ -32,12 +32,10 @@ describe('FSPath', () => {
   it('get file stat', async () => {
     const _stat = stat(join(process.cwd(), '/test/testfiles/2.json'));
     expect(
-      (
-        await FSPath(process.cwd())
-          .test.testfiles['2.json']()
-          .asFile()
-          .getStat()
-      )
+      await FSPath(process.cwd())
+        .test.testfiles['2.json']()
+        .asFile()
+        .getStat()
     ).toMatchObject(_stat);
   });
 });
