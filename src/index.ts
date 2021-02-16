@@ -44,7 +44,9 @@ class FSDirent {
     return new FSDir(this.path);
   }
 
-  public asFile() { return new FSFile(this.path)}
+  public asFile() {
+    return new FSFile(this.path);
+  }
 }
 
 type FSPathType = {
