@@ -1,5 +1,6 @@
 import { FSPath } from '../src';
 import { join } from 'path';
+import { stat } from 'fs/promises';
 
 describe('FSPath', () => {
   it('Join path as prop name', () => {
@@ -29,13 +30,14 @@ describe('FSPath', () => {
   });
 
   it('get file stat', async () => {
+    const _stat = stat(join(process.cwd(), '/test/testfiles/2.json'));
     expect(
       (
         await FSPath(process.cwd())
           .test.testfiles['2.json']()
           .asFile()
           .getStat()
-      ).size
-    ).toEqual(36);
+      )
+    ).toMatchObject(_stat);
   });
 });
