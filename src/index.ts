@@ -15,26 +15,51 @@ class FSDir {
   constructor(public readonly path: string) {}
   public readonly name = basename(this.path);
   public async mapDirs<T>(cb: (file: FSDir) => T) {
-    const dir = await opendir(this.path);
-    const res = [] as T[];
-    for await (const dirent of dir) {
-      if (dirent.isDirectory()) {
-        res.push(cb(new FSDir(join(this.path, dirent.name))));
-      }
-    }
-    return res;
+    return new Promise((resolve, reject) => {
+      opendir(this.path).then(dir => {
+        const res = [] as T[];
+        const next = () =>
+          dir
+            .read()
+            .then(dirent => {
+              if (dirent) {
+                console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`);
+                if (dirent.isDirectory()) {
+                  res.push(cb(new FSDir(join(this.path, dirent.name))));
+                }
+                next();
+              } else {
+                resolve(res);
+              }
+            })
+            .catch(reject);
+        next();
+      });
+    });
   }
 
-  public async mapFiles<T>(cb: (file: FSFile) => T) {
-    const dir = await opendir(this.path);
-    const res = [] as T[];
-    for await (const dirent of dir) {
-      console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`);
-      if (dirent.isFile()) {
-        res.push(cb(new FSFile(join(this.path, dirent.name))));
-      }
-    }
-    return res;
+  public mapFiles<T>(cb: (file: FSFile) => T) {
+    return new Promise((resolve, reject) => {
+      opendir(this.path).then(dir => {
+        const res = [] as T[];
+        const next = () =>
+          dir
+            .read()
+            .then(dirent => {
+              if (dirent) {
+                console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`);
+                if (dirent.isFile()) {
+                  res.push(cb(new FSFile(join(this.path, dirent.name))));
+                }
+                next();
+              } else {
+                resolve(res);
+              }
+            })
+            .catch(reject);
+        next();
+      });
+    });
   }
 }
 
