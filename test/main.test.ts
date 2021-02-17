@@ -1,6 +1,6 @@
 import { FSPath } from '../src';
 import { join } from 'path';
-import { stat } from 'fs/promises';
+import { stat, readdir } from 'fs/promises';
 
 describe('FSPath', () => {
   it('Join path as prop name', () => {
@@ -12,12 +12,14 @@ describe('FSPath', () => {
   });
 
   it('map files in dir', async () => {
+    const dir = (await readdir(join(process.cwd(), '/test/testfiles'), { withFileTypes: true })).filter(d => d.isFile()).map(d => d.name);
+
     expect(
       await FSPath(process.cwd())
         .test.testfiles()
         .asDir()
         .mapFiles(dirent => dirent.name)
-    ).toMatchObject(['1.txt', '2.json']);
+    ).toMatchObject(dir);
   });
 
   it('map subdirs in dir', async () => {
