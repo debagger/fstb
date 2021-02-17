@@ -1,6 +1,6 @@
 import { FSPath } from '../src';
 import { join } from 'path';
-import { stat, readdir } from 'fs/promises';
+import { stat, readdir, Dirent, Stats } from 'fs';
 
 describe('FSPath', () => {
   it('Join path as prop name', () => {
@@ -22,7 +22,15 @@ describe('FSPath', () => {
   };
 
   it('map files in dir', async () => {
-    const dir = (await readdir(join(process.cwd(), '/test/testfiles'), { withFileTypes: true })).filter(d => d.isFile()).map(d => d.name);
+    const dirents = await new Promise<Dirent[]>((resolve, reject) => {
+      const path = join(process.cwd(), '/test/testfiles');
+      readdir(path, { withFileTypes: true }, (err, files) => {
+        if (err) return reject(err);
+        resolve(files);
+      });
+    });
+
+    const dir = dirents.filter(d => d.isFile()).map(d => d.name);
 
     dir.sort(strSort);
     expect(
@@ -45,7 +53,15 @@ describe('FSPath', () => {
   });
 
   it('get file stat', async () => {
-    const _stat = stat(join(process.cwd(), '/test/testfiles/2.json'));
+    const path = join(process.cwd(), '/test/testfiles/2.json');
+
+    const _stat = await new Promise<Stats>((resolve, reject) => {
+      stat(path, (err, stat) => {
+        if (err) return reject(err);
+        resolve(stat);
+      });
+    });
+
     expect(
       await FSPath(process.cwd())
         .test.testfiles['2.json']()
