@@ -1,4 +1,4 @@
-import { opendir, stat } from 'fs';
+import { readdir, stat } from 'fs';
 import { Dirent } from 'fs';
 // import { Dirent } from 'fs';
 import { join, basename } from 'path';
@@ -22,21 +22,18 @@ class FSDir {
   public readonly name = basename(this.path);
   public async reduce<T>(cb: (previousValue: T, dirent: Dirent) => T | Promise<T>, initialValue: T) {
     return new Promise<T>((resolve, reject) => {
-      opendir(this.path, (err, dir) => {
+      readdir(this.path, { withFileTypes: true }, (err, dirents) => {
         if (err) return reject(err);
+        const it = dirents[Symbol.iterator]();
         const next = (previousValue: T) => {
-          dir
-            .read()
-            .then(dirent => {
-              if (dirent == null) return resolve(previousValue);
-              const cbResult = cb(previousValue, dirent);
-              if (cbResult instanceof Promise) {
-                cbResult.then(cbResult => next(cbResult)).catch(reject);
-              } else {
-                next(cbResult);
-              }
-            })
-            .catch(reject);
+          const dirent = it.next();
+          if (dirent.done) return resolve(previousValue);
+          const cbResult = cb(previousValue, dirent.value);
+          if (cbResult instanceof Promise) {
+            cbResult.then(cbResult => next(cbResult)).catch(reject);
+          } else {
+            next(cbResult);
+          }
         };
         next(initialValue);
       });
