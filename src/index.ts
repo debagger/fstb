@@ -14,24 +14,24 @@ class FSFile {
 class FSDir {
   constructor(public readonly path: string) {}
   public readonly name = basename(this.path);
-  public async mapDirs<T>(cb: (file: FSDir) => T | Promise<T>) {
+  public async mapDirs<T>(cb: (file: FSDir) => T) {
     const dir = await opendir(this.path);
     const res = [] as T[];
     for await (const dirent of dir) {
       if (dirent.isDirectory()) {
-        res.push(await cb(new FSDir(join(this.path, dirent.name))));
+        res.push(cb(new FSDir(join(this.path, dirent.name))));
       }
     }
     return res;
   }
 
-  public async mapFiles<T>(cb: (file: FSFile) => T | Promise<T>) {
+  public async mapFiles<T>(cb: (file: FSFile) => T) {
     const dir = await opendir(this.path);
     const res = [] as T[];
     for await (const dirent of dir) {
       console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`);
       if (dirent.isFile()) {
-        res.push(await cb(new FSFile(join(this.path, dirent.name))));
+        res.push(cb(new FSFile(join(this.path, dirent.name))));
       }
     }
     return res;
