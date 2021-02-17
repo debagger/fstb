@@ -11,14 +11,27 @@ describe('FSPath', () => {
     expect(FSPath('/aaa')['bbb.json']().path).toEqual(join('/aaa', 'bbb.json'));
   });
 
+  const strSort = (a: string, b: string) => {
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
+    return 0;
+  };
+
   it('map files in dir', async () => {
     const dir = (await readdir(join(process.cwd(), '/test/testfiles'), { withFileTypes: true })).filter(d => d.isFile()).map(d => d.name);
 
+    dir.sort(strSort);
     expect(
-      await FSPath(process.cwd())
-        .test.testfiles()
-        .asDir()
-        .mapFiles(dirent => dirent.name)
+      (
+        await FSPath(process.cwd())
+          .test.testfiles()
+          .asDir()
+          .mapFiles(dirent => dirent.name)
+      ).sort(strSort)
     ).toMatchObject(dir);
   });
 
