@@ -1,4 +1,4 @@
-import { opendir, stat } from 'fs/promises';
+import { opendir, stat } from 'fs';
 import { Dirent } from 'fs';
 // import { Dirent } from 'fs';
 import { join, basename } from 'path';
@@ -8,7 +8,12 @@ class FSFile {
   public readonly name = basename(this.path);
 
   public async getStat() {
-    return await stat(this.path);
+    return new Promise((resolve, reject) => {
+      stat(this.path, (err, stat) => {
+        if (err) return reject(err);
+        resolve(stat);
+      });
+    });
   }
 }
 
@@ -17,25 +22,24 @@ class FSDir {
   public readonly name = basename(this.path);
   public async reduce<T>(cb: (previousValue: T, dirent: Dirent) => T | Promise<T>, initialValue: T) {
     return new Promise<T>((resolve, reject) => {
-      opendir(this.path)
-        .then(dir => {
-          const next = (previousValue: T) => {
-            dir
-              .read()
-              .then(dirent => {
-                if (dirent == null) return resolve(previousValue);
-                const cbResult = cb(previousValue, dirent);
-                if (cbResult instanceof Promise) {
-                  cbResult.then(cbResult => next(cbResult)).catch(reject);
-                } else {
-                  next(cbResult);
-                }
-              })
-              .catch(reject);
-          };
-          next(initialValue);
-        })
-        .catch(reject);
+      opendir(this.path, (err, dir) => {
+        if (err) return reject(err);
+        const next = (previousValue: T) => {
+          dir
+            .read()
+            .then(dirent => {
+              if (dirent == null) return resolve(previousValue);
+              const cbResult = cb(previousValue, dirent);
+              if (cbResult instanceof Promise) {
+                cbResult.then(cbResult => next(cbResult)).catch(reject);
+              } else {
+                next(cbResult);
+              }
+            })
+            .catch(reject);
+        };
+        next(initialValue);
+      });
     });
   }
   public mapDirs<T>(cb: (file: FSDir) => T) {
