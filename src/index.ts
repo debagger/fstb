@@ -1,4 +1,5 @@
 import { opendir, stat } from 'fs/promises';
+import { Dirent } from 'fs';
 // import { Dirent } from 'fs';
 import { join, basename } from 'path';
 
@@ -14,51 +15,47 @@ class FSFile {
 class FSDir {
   constructor(public readonly path: string) {}
   public readonly name = basename(this.path);
-  public async mapDirs<T>(cb: (file: FSDir) => T) {
-    return new Promise((resolve, reject) => {
-      opendir(this.path).then(dir => {
-        const res = [] as T[];
-        const next = () =>
-          dir
-            .read()
-            .then(dirent => {
-              if (dirent) {
-                if (dirent.isDirectory()) {
-                  res.push(cb(new FSDir(join(this.path, dirent.name))));
+  public async reduce<T>(cb: (previousValue: T, dirent: Dirent) => T | Promise<T>, initialValue: T) {
+    return new Promise<T>((resolve, reject) => {
+      opendir(this.path)
+        .then(dir => {
+          const next = (previousValue: T) => {
+            dir
+              .read()
+              .then(dirent => {
+                if (dirent == null) return resolve(previousValue);
+                const cbResult = cb(previousValue, dirent);
+                if (cbResult instanceof Promise) {
+                  cbResult.then(cbResult => next(cbResult)).catch(reject);
+                } else {
+                  next(cbResult);
                 }
-                next();
-              } else {
-                resolve(res);
-              }
-            })
-            .catch(reject);
-        next();
-      });
+              })
+              .catch(reject);
+          };
+          next(initialValue);
+        })
+        .catch(reject);
     });
+  }
+  public mapDirs<T>(cb: (file: FSDir) => T) {
+    return this.reduce((prev, dirent)=>{
+      if(!dirent.isDirectory()) return prev
+      const subDir = new FSDir(join(this.path, dirent.name))
+      const cbResult = cb(subDir)
+      prev.push(cbResult)
+      return prev
+    }, [] as T[])
   }
 
   public mapFiles<T>(cb: (file: FSFile) => T) {
-    return new Promise((resolve, reject) => {
-      opendir(this.path).then(dir => {
-        const res = [] as T[];
-        const next = () =>
-          dir
-            .read()
-            .then(dirent => {
-              if (dirent) {
-                console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`);
-                if (dirent.isFile()) {
-                  res.push(cb(new FSFile(join(this.path, dirent.name))));
-                }
-                next();
-              } else {
-                resolve(res);
-              }
-            })
-            .catch(reject);
-        next();
-      });
-    });
+    return this.reduce((prev, dirent)=>{
+      if(!dirent.isFile()) return prev
+      const subDir = new FSFile(join(this.path, dirent.name))
+      const cbResult = cb(subDir)
+      prev.push(cbResult)
+      return prev
+    }, [] as T[])
   }
 }
 
