@@ -1,3 +1,5 @@
+![CI](https://github.com/debagger/fstb/workflows/CI/badge.svg)
+
 # FSTB User Guide
 
 FSTB stands for FileSystem ToolBox. This library aims to make it easier to interact with the file system in Node.js
