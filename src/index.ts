@@ -23,7 +23,6 @@ class FSDir {
             .read()
             .then(dirent => {
               if (dirent) {
-                console.log(`Dirent name=${dirent.name}, isFile()=${dirent.isFile()}`);
                 if (dirent.isDirectory()) {
                   res.push(cb(new FSDir(join(this.path, dirent.name))));
                 }
