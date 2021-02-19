@@ -1,6 +1,6 @@
 import { Dirent, readdir } from 'fs';
 import { basename, join } from 'path';
-import { FSFile } from './FSFile';
+import { FSFile } from './fs-file.class';
 
 export class FSDir {
   constructor(public readonly path: string) {}
