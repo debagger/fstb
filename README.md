@@ -13,7 +13,7 @@ npm install fstb --save
 ```
 ## Usage
 ### Work with pathes
-You can create path to filesystem object usin the FSPath function. 
+You can create path to filesystem object using the FSPath function. 
 It can be chained with any key name wich act as path segment.
 
 Example:
@@ -30,9 +30,13 @@ Example:
 FSPath(__dirname).node_modules().asDir()
 FSPath(__dirname)["package.json"]().asFile()
 ```
+
 ### Special directories shortcuts
 
-cwd - is like FSPath(process.cwd())
+* `cwd` is shortcut to `FSPath(process.cwd())`
+* `dirname` is shortcut to `FSPath(__dirname)`
+* `home` is shortcut to `FSPath(os.homedir())`
+* `tmp` is shortcut to `FSPath(os.tmpdir())`
 ... will be continued
 
 
@@ -43,8 +47,8 @@ cwd - is like FSPath(process.cwd())
 ### Iterate subdirs:
 
 ```js
-import { FSPath } from 'fstb';
-FSPath(process.cwd()).node_modules().asDir().mapDirs(dir=>console.log(dir.name))
+import { FSPath, cwd } from 'fstb';
+cwd.node_modules().asDir().mapDirs(dir=>console.log(dir.name))
 
 ```
 ### Read and write json

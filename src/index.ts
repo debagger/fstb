@@ -1,4 +1,5 @@
 import { join, basename } from 'path';
+import {homedir, tmpdir} from "os"
 import { FSDir } from './FSDir';
 import { FSFile } from './FSFile';
 
@@ -47,3 +48,6 @@ export const FSPath = function(path: string): FSPathType {
 };
 
 export const cwd = FSPath(process.cwd());
+export const dirname = FSPath(__dirname)
+export const home = FSPath(homedir())
+export const tmp = FSPath(tmpdir())
