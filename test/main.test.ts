@@ -66,7 +66,24 @@ describe('FSPath', () => {
       await FSPath(process.cwd())
         .test.testfiles['2.json']()
         .asFile()
-        .getStat()
+        .stat()
     ).toMatchObject(_stat);
+  });
+
+  it('write and read json', async () => {
+    const objectToWrite = {
+      test: 'test',
+      test1: 123,
+    };
+    await FSPath(process.cwd())
+      .test.testfiles.dir1['file1.json']()
+      .asFile()
+      .write.json(objectToWrite);
+
+    const readObject = await FSPath(process.cwd())
+      .test.testfiles.dir1['file1.json']()
+      .asFile()
+      .json();
+    expect(readObject).toMatchObject(objectToWrite);
   });
 });
