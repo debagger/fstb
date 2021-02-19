@@ -1,4 +1,4 @@
-import { FSPath } from '../src';
+import { FSPath, cwd } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
 
@@ -35,8 +35,8 @@ describe('FSPath', () => {
     dir.sort(strSort);
     expect(
       (
-        await FSPath(process.cwd())
-          .test.testfiles()
+        await cwd.test
+          .testfiles()
           .asDir()
           .mapFiles(dirent => dirent.name)
       ).sort(strSort)
@@ -45,8 +45,8 @@ describe('FSPath', () => {
 
   it('map subdirs in dir', async () => {
     expect(
-      await FSPath(process.cwd())
-        .test.testfiles()
+      await cwd.test
+        .testfiles()
         .asDir()
         .mapDirs(dirent => dirent.name)
     ).toMatchObject(['dir1', 'dir2']);
@@ -63,8 +63,7 @@ describe('FSPath', () => {
     });
 
     expect(
-      await FSPath(process.cwd())
-        .test.testfiles['2.json']()
+      await cwd.test.testfiles['2.json']()
         .asFile()
         .stat()
     ).toMatchObject(_stat);
@@ -75,15 +74,12 @@ describe('FSPath', () => {
       test: 'test',
       test1: 123,
     };
-    await FSPath(process.cwd())
-      .test.testfiles.dir1['file1.json']()
-      .asFile()
-      .write.json(objectToWrite);
+    const file1 = cwd.test.testfiles.dir1['file1.json']().asFile();
 
-    const readObject = await FSPath(process.cwd())
-      .test.testfiles.dir1['file1.json']()
-      .asFile()
-      .json();
+    await file1.write.json(objectToWrite);
+
+    const readObject = await file1.read.json();
+
     expect(readObject).toMatchObject(objectToWrite);
   });
 });

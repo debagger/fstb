@@ -4,19 +4,19 @@ import { basename } from 'path';
 export class FSFile {
   constructor(public readonly path: string) {}
   public readonly name = basename(this.path);
-
-  public async txt() {
-    return new Promise<string>((resolve, reject) => {
-      readFile(this.path, (err, data) => {
-        if (err) return reject(err);
-        resolve(data.toString());
+  public read = {
+    txt: async () => {
+      return new Promise<string>((resolve, reject) => {
+        readFile(this.path, (err, data) => {
+          if (err) return reject(err);
+          resolve(data.toString());
+        });
       });
-    });
-  }
-
-  public async json() {
-    return JSON.parse(await this.txt());
-  }
+    },
+    json: async () => {
+      return JSON.parse(await this.read.txt());
+    },
+  };
 
   public write = {
     txt: async (txt: string) => {

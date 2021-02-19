@@ -24,3 +24,5 @@ export const FSPath = function(path: string): FSPathType {
     get: (_, key: string) => FSPath(join(path, key)),
   }) as FSPathType;
 };
+
+export const cwd = FSPath(process.cwd());
