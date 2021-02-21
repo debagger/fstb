@@ -52,7 +52,7 @@ describe('FSPath', () => {
         await cwd.test
           .testfiles()
           .asDir()
-          .dirs()
+          .subdirs()
           .map(async dirent => dirent.name)
           .toArray()
       ).sort(strSort)
