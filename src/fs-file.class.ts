@@ -41,9 +41,27 @@ export class FSFile {
     });
   }
 
+  public async isExists() {
+    return new Promise<boolean>(resolve => {
+      access(this.path, constants.F_OK, err => {
+        if (err) return resolve(false);
+        resolve(true);
+      });
+    });
+  }
+
   public async isReadable() {
     return new Promise<boolean>(resolve => {
       access(this.path, constants.R_OK, err => {
+        if (err) return resolve(false);
+        resolve(true);
+      });
+    });
+  }
+
+  public async isWritable() {
+    return new Promise<boolean>(resolve => {
+      access(this.path, constants.W_OK, err => {
         if (err) return resolve(false);
         resolve(true);
       });
