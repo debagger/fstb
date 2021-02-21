@@ -39,16 +39,13 @@ FSPath(__dirname)["package.json"]().asFile()
 * `tmp` is shortcut to `FSPath(os.tmpdir())`
 ... will be continued
 
-
-
-
 ## More examples
 
 ### Iterate subdirs:
 
 ```js
 import { FSPath, cwd } from 'fstb';
-cwd.node_modules().asDir().mapDirs(dir=>console.log(dir.name))
+cwd.node_modules().asDir().subdirs(async dir=>console.log(dir.name))
 
 ```
 ### Read and write json
@@ -73,3 +70,16 @@ cwd.node_modules().asDir().mapDirs(dir=>console.log(dir.name))
 const stat = await cwd.test.testfiles['2.json']().asFile().stat()
 ```
 
+### Print all package names and versions from node_modules
+
+```js
+const { cwd } = require('fstb');
+cwd
+  .node_modules()
+  .asDir()
+  .subdirs()
+  .map(async dir => dir.fspath['package.json']().asFile())
+  .filter(async package_json => await package_json.isReadable())
+  .map(async package_json => await package_json.read.json())
+  .forEach(async content => console.log(`${content.name}@${content.version}`));
+```
