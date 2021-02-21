@@ -1,4 +1,4 @@
-import { stat, readFile, writeFile } from 'fs';
+import { stat, Stats, access, constants, readFile, writeFile } from 'fs';
 import { basename } from 'path';
 
 export class FSFile {
@@ -33,10 +33,19 @@ export class FSFile {
   };
 
   public async stat() {
-    return new Promise((resolve, reject) => {
+    return new Promise<Stats>((resolve, reject) => {
       stat(this.path, (err, stat) => {
         if (err) return reject(err);
         resolve(stat);
+      });
+    });
+  }
+
+  public async isReadable() {
+    return new Promise<boolean>(resolve => {
+      access(this.path, constants.R_OK, err => {
+        if (err) return resolve(false);
+        resolve(true);
       });
     });
   }

@@ -22,7 +22,7 @@ class FSDirent {
   }
 }
 
-type FSPathType = {
+export type FSPathType = {
   (): FSDirent;
   [key: string]: FSPathType;
 };

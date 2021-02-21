@@ -1,6 +1,7 @@
 import { FSPath, cwd } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
+import { FSAsyncIterable } from '../src/asyncIterable.class';
 
 describe('FSPath', () => {
   it('Join path as prop name', () => {
@@ -38,17 +39,23 @@ describe('FSPath', () => {
         await cwd.test
           .testfiles()
           .asDir()
-          .mapFiles(dirent => dirent.name)
+          .files()
+          .map(async dirent => dirent.name)
+          .toArray()
       ).sort(strSort)
     ).toMatchObject(dir);
   });
 
   it('map subdirs in dir', async () => {
     expect(
-      await cwd.test
-        .testfiles()
-        .asDir()
-        .mapDirs(dirent => dirent.name)
+      (
+        await cwd.test
+          .testfiles()
+          .asDir()
+          .dirs()
+          .map(async dirent => dirent.name)
+          .toArray()
+      ).sort(strSort)
     ).toMatchObject(['dir1', 'dir2']);
   });
 
@@ -81,5 +88,32 @@ describe('FSPath', () => {
     const readObject = await file1.read.json();
 
     expect(readObject).toMatchObject(objectToWrite);
+  });
+
+  it('async iterator maps', async () => {
+    const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
+
+    const gen = async function*() {
+      for (let index = 0; index < 3; index++) {
+        await sleep(100);
+        yield index;
+      }
+    };
+    const i = new FSAsyncIterable(gen());
+    const j = i
+      .map(async item => {
+        await sleep(100);
+        return item.toString();
+      })
+      .map(async item => {
+        await sleep(100);
+        return `# ${item}`;
+      });
+    const arr: string[] = [];
+
+    for await (const item of j) {
+      arr.push(item);
+    }
+    expect(arr).toMatchObject(['# 0', '# 1', '# 2']);
   });
 });
