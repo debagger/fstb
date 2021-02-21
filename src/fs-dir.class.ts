@@ -35,10 +35,19 @@ export class FSDir {
       .filter(async dirent => dirent.isFile())
       .map(async dirent => new FSFile(join(this.path, dirent.name)));
   }
-
-  public subdirs() {
-    return this.dirents()
-      .filter(async dirent => dirent.isDirectory())
-      .map(async dirent => new FSDir(join(this.path, dirent.name)));
+  private async *recursiveDirsGen() {
+    for await (const dir of this.subdirs()) {
+      yield dir;
+      yield* dir.subdirs(true);
+    }
+  }
+  public subdirs(recursive: boolean = false): FSAsyncIterable<FSDir> {
+    if (recursive) {
+      return new FSAsyncIterable(this.recursiveDirsGen());
+    } else {
+      return this.dirents()
+        .filter(async dirent => dirent.isDirectory())
+        .map(async dirent => new FSDir(join(this.path, dirent.name)));
+    }
   }
 }
