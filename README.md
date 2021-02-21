@@ -20,6 +20,7 @@ Example:
 ```js
 FSPath(__dirname).node_modules //work as path.join(__dirname, "node_modules")
 FSPath(__dirname)["package.json"] //work as path.join(__dirname, "package.json")
+FSPath(__dirname)["node_modules"]["fstb"]["package.json"]
 ```
 
 ### Work with file system objects 
@@ -32,6 +33,7 @@ FSPath(__dirname)["package.json"]().asFile()
 ```
 
 ### Special directories shortcuts
+
 
 * `cwd` is shortcut to `FSPath(process.cwd())`
 * `dirname` is shortcut to `FSPath(__dirname)`
@@ -71,15 +73,25 @@ const stat = await cwd.test.testfiles['2.json']().asFile().stat()
 ```
 
 ### Print all package names and versions from node_modules
-
+It's complex example shows complex use case for FSTB. 
 ```js
 const { cwd } = require('fstb');
 cwd
   .node_modules()
   .asDir()
-  .subdirs()
+  .subdirs(true) //true for recursive scan all subfolders
   .map(async dir => dir.fspath['package.json']().asFile())
   .filter(async package_json => await package_json.isReadable())
   .map(async package_json => await package_json.read.json())
   .forEach(async content => console.log(`${content.name}@${content.version}`));
+```
+Results:
+```txt
+abab@2.0.5
+acorn@6.4.2
+acorn-globals@4.3.4
+acorn-jsx@5.3.1
+acorn-walk@8.0.2
+...
+yargs-parser@18.1.3
 ```
