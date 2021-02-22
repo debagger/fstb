@@ -1,4 +1,4 @@
-import { Dirent, readdir } from 'fs';
+import { Dirent, readdir, rmdir, RmDirOptions } from 'fs';
 import { basename, join } from 'path';
 import { FSFile } from './fs-file.class';
 import { FSAsyncIterable } from './asyncIterable.class';
@@ -49,5 +49,14 @@ export class FSDir {
         .filter(async dirent => dirent.isDirectory())
         .map(async dirent => new FSDir(join(this.path, dirent.name)));
     }
+  }
+
+  public async rmdir(options: RmDirOptions){
+    return new Promise<void>((resolve, reject)=>{
+      rmdir(this.path, options, (err)=>{
+        if(err) return reject(err)
+        resolve()
+      })
+    })
   }
 }
