@@ -121,7 +121,23 @@ describe('FSPath', () => {
     const testfile = cwd.test.testfiles.dir2['filetodelete.txt']().asFile();
     await testfile.write.txt('It is test text file');
     expect(await testfile.isExists()).toBeTruthy();
-     await testfile.unlink()
-    expect(await testfile.isExists()).not.toBeTruthy()
+    await testfile.unlink();
+    expect(await testfile.isExists()).not.toBeTruthy();
+  });
+
+  it('mkdir and rmdir', async () => {
+    const testdir = cwd.test.testfiles.dir3().asDir();
+    if (await testdir.isExists()) {
+      await testdir.rmdir();
+    }
+    expect(await testdir.isExists()).not.toBeTruthy();
+
+    await testdir.mkdir();
+
+    expect(await testdir.isExists()).toBeTruthy();
+
+    await testdir.rmdir();
+
+    expect(await testdir.isExists()).not.toBeTruthy();
   });
 });

@@ -112,7 +112,7 @@ export class FSFile {
   }
 
   /**
-   * Asynchronously removes a file. 
+   * Asynchronously removes a file.
    */
   public async unlink() {
     return new Promise<void>((resolve, reject) => {
