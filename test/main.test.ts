@@ -116,4 +116,12 @@ describe('FSPath', () => {
     }
     expect(arr).toMatchObject(['# 0', '# 1', '# 2']);
   });
+
+  it('unlink file', async () => {
+    const testfile = cwd.test.testfiles.dir2['filetodelete.txt']().asFile();
+    await testfile.write.txt('It is test text file');
+    expect(await testfile.isExists()).toBeTruthy();
+     await testfile.unlink()
+    expect(await testfile.isExists()).not.toBeTruthy()
+  });
 });
