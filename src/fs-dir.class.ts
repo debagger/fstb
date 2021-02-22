@@ -18,18 +18,36 @@ async function* direntsGen(path: string) {
     yield dirent;
   }
 }
-
+/**
+ * Contains all methods for work with directories
+ */
 export class FSDir {
   constructor(public readonly path: string) {}
 
+  /**
+   * Directory name
+   */
   public readonly name = basename(this.path);
 
+  /**
+   * Return FSPath function for current path. Can be used to countinue joining
+   * path segments to subdirs or files.
+   */
   public readonly fspath = FSPath(this.path);
 
+  /**
+   * Return async iterator which iterates all dirents in dir.
+   * Chaining map, filter and forEach
+   * operators available. toArray operator can be used for resulting chain to array.
+   */
   public dirents() {
     return new FSAsyncIterable(direntsGen(this.path));
   }
 
+  /**
+   * Return async iterator which iterates all files in dir. Chaining map, filter and forEach
+   * operators available. toArray operator can be used for resulting chain to array.
+   */
   public files() {
     return this.dirents()
       .filter(async dirent => dirent.isFile())
@@ -41,6 +59,11 @@ export class FSDir {
       yield* dir.subdirs(true);
     }
   }
+  /**
+   * Return async iterator wich iterates each subdirs. Chaining map, filter and forEach
+   * operators available. toArray operator can be used for resulting chain to array.
+   * @param recursive - if true returns each subdir of any deep
+   */
   public subdirs(recursive: boolean = false): FSAsyncIterable<FSDir> {
     if (recursive) {
       return new FSAsyncIterable(this.recursiveDirsGen());
@@ -50,7 +73,9 @@ export class FSDir {
         .map(async dirent => new FSDir(join(this.path, dirent.name)));
     }
   }
-
+  /**
+   * delete a directory
+   */
   public async rmdir() {
     return new Promise<void>((resolve, reject) => {
       rmdir(this.path, err => {
@@ -60,6 +85,10 @@ export class FSDir {
     });
   }
 
+  /**
+   * Asynchronously creates a directory.
+   * @param recursive - if recursive is true, the first directory path created
+   */
   public async mkdir(recursive: boolean = false) {
     return new Promise<void>((resolve, reject) => {
       mkdir(this.path, { recursive }, err => {

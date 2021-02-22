@@ -3,6 +3,7 @@
 # FSTB User Guide
 
 FSTB stands for FileSystem ToolBox. This library aims to make it easier to interact with the file system in Node.js.
+* [Documentation](https://debagger.github.io/fstb/)
 
 ## Install
 
@@ -11,6 +12,7 @@ For install FSTB:
 ```bash
 npm install fstb --save
 ```
+
 ## Usage
 ### Work with pathes
 You can create path to filesystem object using the FSPath function. 

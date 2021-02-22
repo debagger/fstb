@@ -3,7 +3,10 @@ import { homedir, tmpdir } from 'os';
 import { FSDir } from './fs-dir.class';
 import { FSFile } from './fs-file.class';
 
-class FSDirent {
+/**
+ * Represent dirent which can be converted to FSDir or FSFile.
+ */
+export class FSDirent {
   constructor(public readonly path: string) {}
   public readonly name = basename(this.path);
 
@@ -47,7 +50,22 @@ export const FSPath = function(path: string): FSPathType {
   }) as FSPathType;
 };
 
+/**
+ * Shortcut for FSPath(process.cwd())
+ */
 export const cwd = FSPath(process.cwd());
+
+/**
+ * Shortcut for FSPath(__dirname)
+ */
 export const dirname = FSPath(__dirname);
+
+/**
+ * Shortcut for FSPath(homedir())
+ */
 export const home = FSPath(homedir());
+
+/**
+ * Shortcut for FSPath(tmpdir())
+ */
 export const tmp = FSPath(tmpdir());
