@@ -1,4 +1,4 @@
-import { Dirent, readdir, rmdir, RmDirOptions } from 'fs';
+import { Dirent, readdir, rmdir, RmDirOptions, mkdir, access, constants } from 'fs';
 import { basename, join } from 'path';
 import { FSFile } from './fs-file.class';
 import { FSAsyncIterable } from './asyncIterable.class';
@@ -51,12 +51,33 @@ export class FSDir {
     }
   }
 
-  public async rmdir(options: RmDirOptions){
-    return new Promise<void>((resolve, reject)=>{
-      rmdir(this.path, options, (err)=>{
-        if(err) return reject(err)
-        resolve()
-      })
-    })
+  public async rmdir(options?: RmDirOptions) {
+    return new Promise<void>((resolve, reject) => {
+      rmdir(this.path, options ? options : {}, err => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+  }
+
+  public async mkdir(recursive: boolean = false) {
+    return new Promise<void>((resolve, reject) => {
+      mkdir(this.path, { recursive }, err => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Checks is dir exits
+   */
+  public async isExists() {
+    return new Promise<boolean>(resolve => {
+      access(this.path, constants.F_OK, err => {
+        if (err) return resolve(false);
+        resolve(true);
+      });
+    });
   }
 }
