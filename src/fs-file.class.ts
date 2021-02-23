@@ -1,7 +1,7 @@
 import { stat, Stats, access, constants, unlink } from 'fs';
 import { basename } from 'path';
 import { FSFileWrite } from './fs-file.write.class';
-import { FSFileRead } from './fs-flie.read.class';
+import { FSFileRead } from './fs-file.read.class';
 
 /**
  * Contains all methods to work with files.
@@ -30,7 +30,7 @@ export class FSFile {
    * Returns file Stats object
    * @returns {Promise<Stats>}
    */
-  public async stat() {
+  public async stat(): Promise<Stats> {
     return new Promise<Stats>((resolve, reject) => {
       stat(this.path, (err, stat) => {
         if (err) return reject(err);
