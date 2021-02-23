@@ -16,16 +16,19 @@ export class FSFile {
 
   /**
    * Contains all methods for file read.
+   * @type {FSFileRead}
    */
-  public read = new FSFileRead(this.path);
+  public read: FSFileRead = new FSFileRead(this.path);
 
   /**
    * Contains all methods for writing file
+   * @type {FSFileWrite}
    */
-  public write = new FSFileWrite(this.path);
+  public write: FSFileWrite = new FSFileWrite(this.path);
 
   /**
    * Returns file Stats object
+   * @returns {Promise<Stats>}
    */
   public async stat() {
     return new Promise<Stats>((resolve, reject) => {

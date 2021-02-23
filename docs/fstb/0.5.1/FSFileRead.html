@@ -5,7 +5,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> FSDirent</title>
+  <title> FSFileRead</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -74,7 +74,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Class</p>
-                    <h1>FSDirent</h1>
+                    <h1>FSFileRead</h1>
                 </header>
                 
 
@@ -85,9 +85,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>FSDirent<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>FSFileRead<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Represent dirent which can be converted to FSDir or FSFile.</div>
+            <div class="class-description">Contains methods, that reads from file</div>
         
     
 </header>
@@ -106,12 +106,12 @@
 
 
     
-    <h4 class="name" id="FSDirent">
-        <a class="href-link" href="#FSDirent">#</a>
+    <h4 class="name" id="FSFileRead">
+        <a class="href-link" href="#FSFileRead">#</a>
         
         <span class="code-name">
             
-                new FSDirent<span class="signature">()</span><span class="type-signature"></span>
+                new FSFileRead<span class="signature">()</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -165,9 +165,9 @@
 
     
         <p class="tag-source">
-            <a href="index.ts.html" class="button">View Source</a>
+            <a href="fs-flie.read.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line9">line 9</a>
+                <a href="fs-flie.read.class.ts.html">fs-flie.read.class.ts</a>, <a href="fs-flie.read.class.ts.html#line6">line 6</a>
             </span>
         </p>
     
@@ -209,7 +209,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="FSDirent.html">FSDirent</a></dt>
+            <dt><a href="FSFileRead.html">FSFileRead</a></dt>
             <dd></dd>
         </dl>
     
@@ -231,12 +231,16 @@
 
 
     
-    <h4 class="name" id="asDir">
-        <a class="href-link" href="#asDir">#</a>
+    <h4 class="name" id="json">
+        <a class="href-link" href="#json">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
         
         <span class="code-name">
             
-                asDir<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="FSDir.html">FSDir</a>}</span>
+                json<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span>
             
         </span>
     </h4>
@@ -245,7 +249,7 @@
     
     
     <div class="description">
-        Use to work with current path as file system directory.
+        Read file and parses it to json object
     </div>
     
 
@@ -294,9 +298,9 @@
 
     
         <p class="tag-source">
-            <a href="index.ts.html" class="button">View Source</a>
+            <a href="fs-flie.read.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line18">line 18</a>
+                <a href="fs-flie.read.class.ts.html">fs-flie.read.class.ts</a>, <a href="fs-flie.read.class.ts.html#line28">line 28</a>
             </span>
         </p>
     
@@ -331,7 +335,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type"><a href="FSDir.html">FSDir</a></span>
+<span class="param-type">Promise.&lt;any></span>
 
 
     </div>
@@ -351,12 +355,16 @@
 
 
     
-    <h4 class="name" id="asFile">
-        <a class="href-link" href="#asFile">#</a>
+    <h4 class="name" id="txt">
+        <a class="href-link" href="#txt">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
         
         <span class="code-name">
             
-                asFile<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="FSFile.html">FSFile</a>}</span>
+                txt<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span>
             
         </span>
     </h4>
@@ -365,7 +373,7 @@
     
     
     <div class="description">
-        Use to work with current path as file system file
+        Returns all file content as string. On error trows throwsNodeJS.ErrnoException
     </div>
     
 
@@ -414,9 +422,9 @@
 
     
         <p class="tag-source">
-            <a href="index.ts.html" class="button">View Source</a>
+            <a href="fs-flie.read.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line25">line 25</a>
+                <a href="fs-flie.read.class.ts.html">fs-flie.read.class.ts</a>, <a href="fs-flie.read.class.ts.html#line15">line 15</a>
             </span>
         </p>
     
@@ -451,7 +459,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type"><a href="FSFile.html">FSFile</a></span>
+<span class="param-type">Promise.&lt;string></span>
 
 
     </div>

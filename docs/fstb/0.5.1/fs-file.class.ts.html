@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
                 
             </nav>
         </div>
@@ -103,16 +103,19 @@ export class FSFile {
 
   /**
    * Contains all methods for file read.
+   * @type {FSFileRead}
    */
-  public read = new FSFileRead(this.path);
+  public read: FSFileRead = new FSFileRead(this.path);
 
   /**
    * Contains all methods for writing file
+   * @type {FSFileWrite}
    */
-  public write = new FSFileWrite(this.path);
+  public write: FSFileWrite = new FSFileWrite(this.path);
 
   /**
    * Returns file Stats object
+   * @returns {Promise&lt;Stats>}
    */
   public async stat() {
     return new Promise&lt;Stats>((resolve, reject) => {
