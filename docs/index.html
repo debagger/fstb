@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Home</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p></p>
+                    <h1>Home</h1>
+                </header>
+                
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><p><img src="https://github.com/debagger/fstb/workflows/CI/badge.svg" alt="CI"></p>
+<h1>FSTB User Guide</h1>
+<p>FSTB stands for FileSystem ToolBox. This library aims to make it easier to interact with the file system in Node.js.</p>
+<ul>
+<li><a href="https://debagger.github.io/fstb/">Documentation</a></li>
+</ul>
+<h2>Install</h2>
+<p>For install FSTB:</p>
+<pre class="prettyprint source lang-bash"><code>npm install fstb --save
+</code></pre>
+<h2>Usage</h2>
+<h3>Work with pathes</h3>
+<p>You can create path to filesystem object using the FSPath function.
+It can be chained with any key name wich act as path segment.</p>
+<p>Example:</p>
+<pre class="prettyprint source lang-js"><code>FSPath(__dirname).node_modules //work as path.join(__dirname, &quot;node_modules&quot;)
+FSPath(__dirname)[&quot;package.json&quot;] //work as path.join(__dirname, &quot;package.json&quot;)
+FSPath(__dirname)[&quot;node_modules&quot;][&quot;fstb&quot;][&quot;package.json&quot;]
+</code></pre>
+<h3>Work with file system objects</h3>
+<p>When path completed, you can get further operation to call it as function.</p>
+<p>Example:</p>
+<pre class="prettyprint source lang-js"><code>FSPath(__dirname).node_modules().asDir()
+FSPath(__dirname)[&quot;package.json&quot;]().asFile()
+</code></pre>
+<h3>Special directories shortcuts</h3>
+<ul>
+<li><code>cwd</code> is shortcut to <code>FSPath(process.cwd())</code></li>
+<li><code>dirname</code> is shortcut to <code>FSPath(__dirname)</code></li>
+<li><code>home</code> is shortcut to <code>FSPath(os.homedir())</code></li>
+<li><code>tmp</code> is shortcut to <code>FSPath(os.tmpdir())</code>
+... will be continued</li>
+</ul>
+<h2>More examples</h2>
+<h3>Iterate subdirs:</h3>
+<pre class="prettyprint source lang-js"><code>import { FSPath, cwd } from 'fstb';
+cwd.node_modules().asDir().subdirs(async dir=>console.log(dir.name))
+
+</code></pre>
+<h3>Read and write json</h3>
+<pre class="prettyprint source lang-js"><code>    const objectToWrite = {
+      test: 'test',
+      test1: 123,
+    };
+    //constructs path to file and get it as FSFile object
+    const file1 = cwd.test.testfiles.dir1['file1.json']().asFile();
+
+    //serialize object as json and save in to file1.json
+    await file1.write.json(objectToWrite);
+
+    //read json object from file1.json
+    const readedObject = await file1.read.json();
+</code></pre>
+<h3>Get file stats</h3>
+<pre class="prettyprint source lang-js"><code>const stat = await cwd.test.testfiles['2.json']().asFile().stat()
+</code></pre>
+<h3>Print all package names and versions from node_modules</h3>
+<p>It's complex example shows complex use case for FSTB.</p>
+<pre class="prettyprint source lang-js"><code>const { cwd } = require('fstb');
+cwd
+  .node_modules()
+  .asDir()
+  .subdirs(true) //true for recursive scan all subfolders
+  .map(async dir => dir.fspath['package.json']().asFile())
+  .filter(async package_json => await package_json.isReadable())
+  .map(async package_json => await package_json.read.json())
+  .forEach(async content => console.log(`${content.name}@${content.version}`));
+</code></pre>
+<p>Results:</p>
+<pre class="prettyprint source lang-txt"><code>abab@2.0.5
+acorn@6.4.2
+acorn-globals@4.3.4
+acorn-jsx@5.3.1
+acorn-walk@8.0.2
+...
+yargs-parser@18.1.3
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>
