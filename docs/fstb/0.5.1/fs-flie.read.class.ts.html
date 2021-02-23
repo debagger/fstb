@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> fs-file.class.ts</title>
+  <title> fs-flie.read.class.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>fs-file.class.ts</h1>
+                    <h1>fs-flie.read.class.ts</h1>
                 </header>
                 
 
@@ -85,129 +85,30 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { stat, Stats, access, constants, readFile, writeFile, unlink } from 'fs';
-import { basename } from 'path';
-
-/**
- * Contains all methods to work with files.
- */
-export class FSFile {
+            <pre class="prettyprint source linenums"><code>import { readFile } from 'fs';
+export class FSFileRead {
   constructor(public readonly path: string) {}
 
   /**
-   * Contains file name.
+   * Returns all file content as string. On error trows throws
+   * NodeJS.ErrnoException
+   * @returns {Promise&lt;string>}
    */
-  public readonly name = basename(this.path);
-
-  /**
-   * Contains all methods for file read.
-   */
-  public read = {
-    /**
-     * Returns all file content as string. On error trows throws
-     * NodeJS.ErrnoException
-     */
-    txt: async () => {
-      return new Promise&lt;string>((resolve, reject) => {
-        readFile(this.path, (err, data) => {
-          if (err) return reject(err);
-          resolve(data.toString());
-        });
-      });
-    },
-    /**
-     * Read file and parses it to json object
-     */
-    json: async () => {
-      return JSON.parse(await this.read.txt());
-    },
-  };
-
-  /**
-   * Contains all methods for writing file
-   */
-  public write = {
-    /**
-     * Writes string to file
-     * @param txt - content to write
-     */
-    txt: async (txt: string) => {
-      return new Promise&lt;void>((resolve, reject) => {
-        writeFile(this.path, txt, err => {
-          if (err) return reject(err);
-          resolve();
-        });
-      });
-    },
-
-    /**
-     * Serialize onject to JSON and writes it to file
-     * @param obj - object to serialize
-     */
-    json: async (obj: object) => {
-      await this.write.txt(JSON.stringify(obj));
-    },
-  };
-
-  /**
-   * Returns file Stats object
-   */
-  public async stat() {
-    return new Promise&lt;Stats>((resolve, reject) => {
-      stat(this.path, (err, stat) => {
+  async txt(): Promise&lt;string> {
+    return new Promise&lt;string>((resolve, reject) => {
+      readFile(this.path, (err, data) => {
         if (err) return reject(err);
-        resolve(stat);
+        resolve(data.toString());
       });
     });
   }
 
   /**
-   * Checks is file exits. If you need write or read file
-   * use isWritable or isReadable to check if it possible.
+   * Read file and parses it to json object
+   * @returns {Promise&lt;any>}
    */
-  public async isExists() {
-    return new Promise&lt;boolean>(resolve => {
-      access(this.path, constants.F_OK, err => {
-        if (err) return resolve(false);
-        resolve(true);
-      });
-    });
-  }
-
-  /**
-   * Checks possibility to read file.
-   */
-  public async isReadable() {
-    return new Promise&lt;boolean>(resolve => {
-      access(this.path, constants.R_OK, err => {
-        if (err) return resolve(false);
-        resolve(true);
-      });
-    });
-  }
-
-  /**
-   * Checks possibility to write into file.
-   */
-  public async isWritable() {
-    return new Promise&lt;boolean>(resolve => {
-      access(this.path, constants.W_OK, err => {
-        if (err) return resolve(false);
-        resolve(true);
-      });
-    });
-  }
-
-  /**
-   * Asynchronously removes a file.
-   */
-  public async unlink() {
-    return new Promise&lt;void>((resolve, reject) => {
-      unlink(this.path, err => {
-        if (err) return reject(err);
-        resolve();
-      });
-    });
+  async json(): Promise&lt;any> {
+    return JSON.parse(await this.txt());
   }
 }
 </code></pre>

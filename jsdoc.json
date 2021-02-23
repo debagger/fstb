@@ -9,7 +9,7 @@
   },
   "plugins": ["node_modules/better-docs/typescript"],
   "source": {
-    "include": ["./src"],
+    "include": ["./src", "./package.json"],
     "includePattern": "\\.(jsx|js|ts|tsx)$"
   }
 }

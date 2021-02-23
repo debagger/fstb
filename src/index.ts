@@ -11,7 +11,8 @@ export class FSDirent {
   public readonly name = basename(this.path);
 
   /**
-   * Use to work with current path as file system directory
+   * Use to work with current path as file system directory.
+   * @return {FSDir}
    */
   public asDir() {
     return new FSDir(this.path);
@@ -19,6 +20,7 @@ export class FSDirent {
 
   /**
    * Use to work with current path as file system file
+   * @return {FSFile}
    */
   public asFile() {
     return new FSFile(this.path);
@@ -33,15 +35,15 @@ export type FSPathType = {
 /**
  * Creates path to filesystem object. Can be chained with any
  * key name wich act as path segment.
- * Example:
+ * @return {FSDirent}
+ *
+ * @example
  * FSPath(__dirname).node_modules //work as path.join(__dirname, "node_modules")
  * FSPath(__dirname)["package.json"] //work as path.join(__dirname, "package.json")
- *
- * When path completed you can get further operation to call it as function.
- * Example:
- * FSPath(__dirname).node_modules.asDir()
- * FSPath(__dirname)["package.json"].asFile()
- * At this point you can use FSDir
+ * // When path completed you can get further operation to call it as function.
+ * FSPath(__dirname).node_modules().asDir()
+ * FSPath(__dirname)["package.json"]().asFile()
+ * //At this point you can use FSDir
  * @param {string} path - start path
  */
 export const FSPath = function(path: string): FSPathType {

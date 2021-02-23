@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> index.ts</title>
+  <title> fs-file.class.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>index.ts</h1>
+                    <h1>fs-file.class.ts</h1>
                 </header>
                 
 
@@ -85,77 +85,93 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { join, basename } from 'path';
-import { homedir, tmpdir } from 'os';
-import { FSDir } from './fs-dir.class';
-import { FSFile } from './fs-file.class';
+            <pre class="prettyprint source linenums"><code>import { stat, Stats, access, constants, unlink } from 'fs';
+import { basename } from 'path';
+import { FSFileWrite } from './fs-file.write.class';
+import { FSFileRead } from './fs-flie.read.class';
 
 /**
- * Represent dirent which can be converted to FSDir or FSFile.
+ * Contains all methods to work with files.
  */
-export class FSDirent {
+export class FSFile {
   constructor(public readonly path: string) {}
+
+  /**
+   * Contains file name.
+   */
   public readonly name = basename(this.path);
 
   /**
-   * Use to work with current path as file system directory
+   * Contains all methods for file read.
    */
-  public asDir() {
-    return new FSDir(this.path);
+  public read = new FSFileRead(this.path);
+
+  /**
+   * Contains all methods for writing file
+   */
+  public write = new FSFileWrite(this.path);
+
+  /**
+   * Returns file Stats object
+   */
+  public async stat() {
+    return new Promise&lt;Stats>((resolve, reject) => {
+      stat(this.path, (err, stat) => {
+        if (err) return reject(err);
+        resolve(stat);
+      });
+    });
   }
 
   /**
-   * Use to work with current path as file system file
+   * Checks is file exits. If you need write or read file
+   * use isWritable or isReadable to check if it possible.
    */
-  public asFile() {
-    return new FSFile(this.path);
+  public async isExists() {
+    return new Promise&lt;boolean>(resolve => {
+      access(this.path, constants.F_OK, err => {
+        if (err) return resolve(false);
+        resolve(true);
+      });
+    });
+  }
+
+  /**
+   * Checks possibility to read file.
+   */
+  public async isReadable() {
+    return new Promise&lt;boolean>(resolve => {
+      access(this.path, constants.R_OK, err => {
+        if (err) return resolve(false);
+        resolve(true);
+      });
+    });
+  }
+
+  /**
+   * Checks possibility to write into file.
+   */
+  public async isWritable() {
+    return new Promise&lt;boolean>(resolve => {
+      access(this.path, constants.W_OK, err => {
+        if (err) return resolve(false);
+        resolve(true);
+      });
+    });
+  }
+
+  /**
+   * Asynchronously removes a file.
+   */
+  public async unlink() {
+    return new Promise&lt;void>((resolve, reject) => {
+      unlink(this.path, err => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
   }
 }
-
-export type FSPathType = {
-  (): FSDirent;
-  [key: string]: FSPathType;
-};
-
-/**
- * Creates path to filesystem object. Can be chained with any
- * key name wich act as path segment.
- * Example:
- * FSPath(__dirname).node_modules //work as path.join(__dirname, "node_modules")
- * FSPath(__dirname)["package.json"] //work as path.join(__dirname, "package.json")
- *
- * When path completed you can get further operation to call it as function.
- * Example:
- * FSPath(__dirname).node_modules.asDir()
- * FSPath(__dirname)["package.json"].asFile()
- * At this point you can use FSDir
- * @param {string} path - start path
- */
-export const FSPath = function(path: string): FSPathType {
-  return new Proxy(() => new FSDirent(path), {
-    get: (_, key: string) => FSPath(join(path, key)),
-  }) as FSPathType;
-};
-
-/**
- * Shortcut for FSPath(process.cwd())
- */
-export const cwd = FSPath(process.cwd());
-
-/**
- * Shortcut for FSPath(__dirname)
- */
-export const dirname = FSPath(__dirname);
-
-/**
- * Shortcut for FSPath(homedir())
- */
-export const home = FSPath(homedir());
-
-/**
- * Shortcut for FSPath(tmpdir())
- */
-export const tmp = FSPath(tmpdir());
 </code></pre>
         </article>
     </section>

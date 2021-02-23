@@ -1,5 +1,7 @@
-import { stat, Stats, access, constants, readFile, writeFile, unlink } from 'fs';
+import { stat, Stats, access, constants, unlink } from 'fs';
 import { basename } from 'path';
+import { FSFileWrite } from './fs-file.write.class';
+import { FSFileRead } from './fs-flie.read.class';
 
 /**
  * Contains all methods to work with files.
@@ -15,52 +17,12 @@ export class FSFile {
   /**
    * Contains all methods for file read.
    */
-  public read = {
-    /**
-     * Returns all file content as string. On error trows throws
-     * NodeJS.ErrnoException
-     */
-    txt: async () => {
-      return new Promise<string>((resolve, reject) => {
-        readFile(this.path, (err, data) => {
-          if (err) return reject(err);
-          resolve(data.toString());
-        });
-      });
-    },
-    /**
-     * Read file and parses it to json object
-     */
-    json: async () => {
-      return JSON.parse(await this.read.txt());
-    },
-  };
+  public read = new FSFileRead(this.path);
 
   /**
    * Contains all methods for writing file
    */
-  public write = {
-    /**
-     * Writes string to file
-     * @param txt - content to write
-     */
-    txt: async (txt: string) => {
-      return new Promise<void>((resolve, reject) => {
-        writeFile(this.path, txt, err => {
-          if (err) return reject(err);
-          resolve();
-        });
-      });
-    },
-
-    /**
-     * Serialize onject to JSON and writes it to file
-     * @param obj - object to serialize
-     */
-    json: async (obj: object) => {
-      await this.write.txt(JSON.stringify(obj));
-    },
-  };
+  public write = new FSFileWrite(this.path);
 
   /**
    * Returns file Stats object
