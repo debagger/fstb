@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> index.ts</title>
+  <title> fs-iterable.class.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>index.ts</h1>
+                    <h1>fs-iterable.class.ts</h1>
                 </header>
                 
 
@@ -85,79 +85,76 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { join, basename } from 'path';
-import { homedir, tmpdir } from 'os';
-import { FSDir } from './fs-dir.class';
-import { FSFile } from './fs-file.class';
-
-/**
- * Represent dirent which can be converted to FSDir or FSFile.
+            <pre class="prettyprint source linenums"><code>/**
+ * This is util class not inteded to use directly, It used for iterate through dirents.
  */
-export class FSDirent {
-  constructor(public readonly path: string) {}
-  public readonly name = basename(this.path);
+export class FSIterable&lt;T> {
+  /**
+   * Push next item to iterable chain.
+   */
+  public push: (item: T) => void = () => {
+    throw new Error('Define operation first');
+  };
 
   /**
-   * Use to work with current path as file system directory.
-   * @return {FSDir}
+   * Finish chain
    */
-  public asDir(): FSDir {
-    return new FSDir(this.path);
+  public end: () => void = () => {
+    throw new Error('Define operation first');
+  };
+
+  /**
+   * Transform input items
+   * @param callback - function that peroform transform operation on input item
+   */
+
+  map&lt;P>(callback: (item: T) => P) {
+    const i = new FSIterable&lt;P>();
+    this.push = (item: T) => {
+      if (i.push) {
+        i.push(callback(item));
+      }
+    };
+    this.end = () => i.end();
+    return i;
   }
 
   /**
-   * Use to work with current path as file system file
-   * @return {FSFile}
+   * Pass items only when callback returns true.
+   * @param callback - function that returns true if item must passed.
    */
-  public asFile(): FSFile {
-    return new FSFile(this.path);
+  filter(callback: (item: T) => boolean) {
+    const i = new FSIterable&lt;T>();
+    this.push = (item: T) => {
+      if (i.push &amp;&amp; callback(item)) {
+        i.push(item);
+      }
+    };
+    this.end = () => i.end();
+    return i;
+  }
+
+  /**
+   * The forEach() method executes a provided function once for each array element
+   * @param callback - function performs with each input item
+   */
+  async forEach(callback: (item: T) => void) {
+    this.push = callback;
+    return new Promise&lt;void>(resolve => {
+      this.end = resolve;
+    });
+  }
+  /**
+   *The toArray() method collect iterator items to array.
+   */
+  async toArray() {
+    return new Promise&lt;T[]>(resolve => {
+      const arr: T[] = [];
+      this.push = (item: T) => arr.push(item);
+      this.end = () => resolve(arr);
+    });
   }
 }
-
-export type FSPathType = {
-  (): FSDirent;
-  [key: string]: FSPathType;
-};
-
-/**
- * Creates path to filesystem object. Can be chained with any
- * key name wich act as path segment.
- * @return {FSDirent}
- *
- * @example
- * FSPath(__dirname).node_modules //work as path.join(__dirname, "node_modules")
- * FSPath(__dirname)["package.json"] //work as path.join(__dirname, "package.json")
- * // When path completed you can get further operation to call it as function.
- * FSPath(__dirname).node_modules().asDir()
- * FSPath(__dirname)["package.json"]().asFile()
- * //At this point you can use FSDir
- * @param {string} path - start path
- */
-export const FSPath = function(path: string): FSPathType {
-  return new Proxy(() => new FSDirent(path), {
-    get: (_, key: string) => FSPath(join(path, key)),
-  }) as FSPathType;
-};
-
-/**
- * Shortcut for FSPath(process.cwd())
- */
-export const cwd = FSPath(process.cwd());
-
-/**
- * Shortcut for FSPath(__dirname)
- */
-export const dirname = FSPath(__dirname);
-
-/**
- * Shortcut for FSPath(homedir())
- */
-export const home = FSPath(homedir());
-
-/**
- * Shortcut for FSPath(tmpdir())
- */
-export const tmp = FSPath(tmpdir());
 </code></pre>
         </article>
     </section>

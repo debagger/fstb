@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
                 
             </nav>
         </div>
@@ -88,7 +88,7 @@
             <pre class="prettyprint source linenums"><code>import { stat, Stats, access, constants, unlink } from 'fs';
 import { basename } from 'path';
 import { FSFileWrite } from './fs-file.write.class';
-import { FSFileRead } from './fs-flie.read.class';
+import { FSFileRead } from './fs-file.read.class';
 
 /**
  * Contains all methods to work with files.
@@ -115,9 +115,10 @@ export class FSFile {
 
   /**
    * Returns file Stats object
+   * @
    * @returns {Promise&lt;Stats>}
    */
-  public async stat() {
+  public async stat(): Promise&lt;Stats> {
     return new Promise&lt;Stats>((resolve, reject) => {
       stat(this.path, (err, stat) => {
         if (err) return reject(err);

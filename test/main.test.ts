@@ -1,7 +1,7 @@
 import { FSPath, cwd } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
-import { FSAsyncIterable } from '../src/asyncIterable.class';
+import { FSAsyncIterable } from '../src/fs-async-iterable.class';
 
 describe('FSPath', () => {
   it('Join path as prop name', () => {

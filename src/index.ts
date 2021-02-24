@@ -14,7 +14,7 @@ export class FSDirent {
    * Use to work with current path as file system directory.
    * @return {FSDir}
    */
-  public asDir() {
+  public asDir(): FSDir {
     return new FSDir(this.path);
   }
 
@@ -22,7 +22,7 @@ export class FSDirent {
    * Use to work with current path as file system file
    * @return {FSFile}
    */
-  public asFile() {
+  public asFile(): FSFile {
     return new FSFile(this.path);
   }
 }

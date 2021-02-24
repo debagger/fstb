@@ -1,7 +1,7 @@
 import { Dirent, readdir, rmdir, mkdir, access, constants } from 'fs';
 import { basename, join } from 'path';
 import { FSFile } from './fs-file.class';
-import { FSAsyncIterable } from './asyncIterable.class';
+import { FSAsyncIterable } from './fs-async-iterable.class';
 import { FSPath, FSPathType } from '.';
 
 const readDirPromise = (path: string) =>

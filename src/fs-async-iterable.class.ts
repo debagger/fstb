@@ -13,25 +13,26 @@ export class FSAsyncIterable<T> implements AsyncIterable<T> {
    */
   map<P>(callback: (item: T) => Promise<P>) {
     const iterable = this.iterable;
-    const gen = async function*() {
+    const mapAsyncGenerator = async function*() {
       for await (const item of iterable) {
         yield await callback(item);
       }
     };
-    return new FSAsyncIterable(gen());
+    return new FSAsyncIterable(mapAsyncGenerator());
   }
+
   /**
    * Pass items only when callback returns true.
    * @param callback - async function (must return Promise).
    */
   filter(callback: (item: T) => Promise<boolean>) {
     const iterable = this.iterable;
-    const gen = async function*() {
+    const filterAsyncGenerator = async function*() {
       for await (const item of iterable) {
         if (await callback(item)) yield item;
       }
     };
-    return new FSAsyncIterable(gen());
+    return new FSAsyncIterable(filterAsyncGenerator());
   }
 
   /**

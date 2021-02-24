@@ -28,6 +28,7 @@ export class FSFile {
 
   /**
    * Returns file Stats object
+   * @
    * @returns {Promise<Stats>}
    */
   public async stat(): Promise<Stats> {

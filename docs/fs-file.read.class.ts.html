@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> index.ts</title>
+  <title> fs-file.read.class.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>index.ts</h1>
+                    <h1>fs-file.read.class.ts</h1>
                 </header>
                 
 
@@ -85,79 +85,86 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { join, basename } from 'path';
-import { homedir, tmpdir } from 'os';
-import { FSDir } from './fs-dir.class';
-import { FSFile } from './fs-file.class';
-
+            <pre class="prettyprint source linenums"><code>import { readFile, createReadStream } from 'fs';
+import { createInterface } from 'readline';
+import { FSIterable } from './fs-iterable.class';
 /**
- * Represent dirent which can be converted to FSDir or FSFile.
+ * Contains methods, that reads from file
  */
-export class FSDirent {
+export class FSFileRead {
   constructor(public readonly path: string) {}
-  public readonly name = basename(this.path);
 
   /**
-   * Use to work with current path as file system directory.
-   * @return {FSDir}
+   * Returns all file content as string. On error trows throws
+   * NodeJS.ErrnoException
+   * @returns {Promise&lt;string>}
    */
-  public asDir(): FSDir {
-    return new FSDir(this.path);
+  public async txt(): Promise&lt;string> {
+    return new Promise&lt;string>((resolve, reject) => {
+      readFile(this.path, (err, data) => {
+        if (err) return reject(err);
+        resolve(data.toString());
+      });
+    });
   }
 
   /**
-   * Use to work with current path as file system file
-   * @return {FSFile}
+   * Read file and parses it to json object
+   * @returns {Promise&lt;any>}
    */
-  public asFile(): FSFile {
-    return new FSFile(this.path);
+  public async json(): Promise&lt;any> {
+    return JSON.parse(await this.txt());
+  }
+
+  /**
+   * Read text files line by line
+   * @returns {FSAsyncIterable&lt;string>}
+   */
+  public lineByLine(): FSIterable&lt;string> {
+    const fileStream = createReadStream(this.path);
+    const readLine = createInterface({
+      input: fileStream,
+      crlfDelay: Infinity,
+    });
+    const iterable = new FSIterable&lt;string>();
+
+    readLine.on('line', line => {
+      iterable.push(line);
+    });
+    readLine.on('close', () => {
+      iterable.end();
+    });
+    return iterable;
+  }
+/**
+ * Read csv as array of arrays
+ * @param splitter 
+ */
+  public csvArrays(splitter: string): FSIterable&lt;string[]> {
+    return this.lineByLine().map(line => line.split(splitter));
+  }
+
+  /**
+   * Read csv as objects. Take first line as object keys
+   * @param splitter 
+   */
+  public csvWithHeader(splitter: string): FSIterable&lt;Record&lt;string, string>> {
+    const iter = this.csvArrays(splitter);
+    let header: string[];
+    return iter
+      .filter(item => {
+        if (header) return true;
+        header = item;
+        return false;
+      })
+      .map(line =>
+        header.reduce((obj, key, index) => {
+          obj[key] = line[index];
+          return obj;
+        }, {} as Record&lt;string, string>)
+      );
   }
 }
-
-export type FSPathType = {
-  (): FSDirent;
-  [key: string]: FSPathType;
-};
-
-/**
- * Creates path to filesystem object. Can be chained with any
- * key name wich act as path segment.
- * @return {FSDirent}
- *
- * @example
- * FSPath(__dirname).node_modules //work as path.join(__dirname, "node_modules")
- * FSPath(__dirname)["package.json"] //work as path.join(__dirname, "package.json")
- * // When path completed you can get further operation to call it as function.
- * FSPath(__dirname).node_modules().asDir()
- * FSPath(__dirname)["package.json"]().asFile()
- * //At this point you can use FSDir
- * @param {string} path - start path
- */
-export const FSPath = function(path: string): FSPathType {
-  return new Proxy(() => new FSDirent(path), {
-    get: (_, key: string) => FSPath(join(path, key)),
-  }) as FSPathType;
-};
-
-/**
- * Shortcut for FSPath(process.cwd())
- */
-export const cwd = FSPath(process.cwd());
-
-/**
- * Shortcut for FSPath(__dirname)
- */
-export const dirname = FSPath(__dirname);
-
-/**
- * Shortcut for FSPath(homedir())
- */
-export const home = FSPath(homedir());
-
-/**
- * Shortcut for FSPath(tmpdir())
- */
-export const tmp = FSPath(tmpdir());
 </code></pre>
         </article>
     </section>

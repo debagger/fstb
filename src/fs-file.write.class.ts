@@ -1,4 +1,4 @@
-import { writeFile } from 'fs';
+import { writeFile, createWriteStream } from 'fs';
 /**
  * Contains methods that write to file
  */
@@ -25,4 +25,10 @@ export class FSFileWrite {
   async json(obj: object) {
     await this.txt(JSON.stringify(obj));
   }
+
+  createWriteStream(options?: SecondArgument<typeof createWriteStream>){
+    return createWriteStream(this.path, options)
+  }
 }
+
+type SecondArgument<T> = T extends (arg1: any, arg2: infer U, ...args: any[]) => any ? U : any;
