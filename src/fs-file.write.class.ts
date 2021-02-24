@@ -26,8 +26,8 @@ export class FSFileWrite {
     await this.txt(JSON.stringify(obj));
   }
 
-  createWriteStream(options?: SecondArgument<typeof createWriteStream>){
-    return createWriteStream(this.path, options)
+  createWriteStream(options?: SecondArgument<typeof createWriteStream>) {
+    return createWriteStream(this.path, options);
   }
 }
 

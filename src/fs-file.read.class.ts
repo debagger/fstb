@@ -49,17 +49,17 @@ export class FSFileRead {
     });
     return iterable;
   }
-/**
- * Read csv as array of arrays
- * @param splitter 
- */
+  /**
+   * Read csv as array of arrays
+   * @param splitter
+   */
   public csvArrays(splitter: string): FSIterable<string[]> {
     return this.lineByLine().map(line => line.split(splitter));
   }
 
   /**
    * Read csv as objects. Take first line as object keys
-   * @param splitter 
+   * @param splitter
    */
   public csvWithHeader(splitter: string): FSIterable<Record<string, string>> {
     const iter = this.csvArrays(splitter);
