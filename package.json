@@ -1,6 +1,11 @@
 {
   "version": "0.6.0",
   "license": "MIT",
+  "homepage": "https://debagger.github.io/fstb/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/debagger/fstb.git"
+  },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -20,6 +25,7 @@
     "analyze": "size-limit --why",
     "docs": "jsdoc -c jsdoc.json"
   },
+
   "peerDependencies": {},
   "husky": {
     "hooks": {
