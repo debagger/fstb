@@ -1,5 +1,6 @@
 import { readFile, createReadStream } from 'fs';
 import { createInterface } from 'readline';
+import { FSAsyncIterable } from './fs-async-iterable.class';
 import { FSIterable } from './fs-iterable.class';
 /**
  * Contains methods, that reads from file
@@ -77,4 +78,41 @@ export class FSFileRead {
         }, {} as Record<string, string>)
       );
   }
+
+  public lineByLineAsync(): FSAsyncIterable<string> {
+    const fileStream = createReadStream(this.path);
+    const readLine = createInterface({
+      input: fileStream,
+      crlfDelay: Infinity,
+    });
+    const reader = async function*() {
+      for await (const line of readLine) {
+        yield line;
+      }
+      fileStream.close();
+    };
+    return new FSAsyncIterable(reader());
+  }
+
+  public csvArraysAsync(splitter: string): FSAsyncIterable<string[]> {
+    return this.lineByLineAsync().map(async line => line.split(splitter));
+  }
+
+  public csvWithHeaderAsync(splitter: string): FSAsyncIterable<Record<string, string>> {
+    const iter = this.csvArraysAsync(splitter)[Symbol.asyncIterator]();
+    const reader = async function*() {
+      const firstlineres = await iter.next();
+      if (!firstlineres.done) {
+        const firstline = firstlineres.value;
+        for await (const line of iter) {
+          yield firstline.reduce((obj, key, index) => {
+            obj[key] = line[index];
+            return obj;
+          }, {} as Record<string, string>);
+        }
+      }
+    };
+    return new FSAsyncIterable(reader());
+  }
 }
+
