@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.6.1",
   "license": "MIT",
   "homepage": "https://debagger.github.io/fstb/",
   "repository": {
@@ -25,7 +25,6 @@
     "analyze": "size-limit --why",
     "docs": "jsdoc -c jsdoc.json"
   },
-
   "peerDependencies": {},
   "husky": {
     "hooks": {
