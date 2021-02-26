@@ -140,4 +140,49 @@ describe('FSPath', () => {
 
     expect(await testdir.isExists()).not.toBeTruthy();
   });
+  it('subdir', async () => {
+    const dirnames = await cwd.test
+      .testfiles()
+      .asDir()
+      .subdirs()
+      .map(async dir => dir.name)
+      .toArray();
+    dirnames.sort(strSort);
+    expect(dirnames).toMatchObject(['dir1', 'dir2']);
+  });
+
+  it('subdir recursive', async () => {
+    const dirnames = await cwd.test
+      .testfiles()
+      .asDir()
+      .subdirs(true)
+      .map(async dir => dir.name)
+      .toArray();
+    dirnames.sort(strSort);
+    expect(dirnames).toMatchObject(['dir1', 'dir2', 'subdir1', 'subsubdir']);
+  });
+
+  it('csv', async () => {
+    const csvContent = await cwd.test.testfiles.dir2['test.csv']()
+      .asFile()
+      .read.csvWithHeader(';')
+      .toArray();
+    const expectContent = [
+      { col1: 'row1col1', col2: 'row1col2', col3: 'row1col3' },
+      { col1: 'row2col1', col2: 'row2col2', col3: 'row2col3' },
+    ];
+    expect(csvContent).toMatchObject(expectContent);
+  });
+
+  it('csv async', async () => {
+    const csvContent = await cwd.test.testfiles.dir2['test.csv']()
+      .asFile()
+      .read.csvWithHeaderAsync(';')
+      .toArray();
+    const expectContent = [
+      { col1: 'row1col1', col2: 'row1col2', col3: 'row1col3' },
+      { col1: 'row2col1', col2: 'row2col2', col3: 'row2col3' },
+    ];
+    expect(csvContent).toMatchObject(expectContent);
+  });
 });
