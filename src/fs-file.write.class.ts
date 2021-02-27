@@ -26,6 +26,10 @@ export class FSFileWrite {
     await this.txt(JSON.stringify(obj));
   }
 
+  /**
+   * Creates standart node fs WriteStream for this path.
+   * @param options - node fs.createWriteStream options
+   */
   createWriteStream(options?: SecondArgument<typeof createWriteStream>) {
     return createWriteStream(this.path, options);
   }

@@ -185,4 +185,48 @@ describe('FSPath', () => {
     ];
     expect(csvContent).toMatchObject(expectContent);
   });
+
+  it('creates WriteStream', async () => {
+    const file = cwd.test.testfiles['test-write-stream.txt']().asFile();
+    if (await file.isExists()) await file.unlink();
+    const stream = file.write.createWriteStream({ encoding: 'utf8', autoClose: true });
+    const expectedContent = 'Test content';
+    stream.write(expectedContent);
+    stream.end(async () => {
+      const actualContent = await file.read.txt();
+      expect(actualContent).toBe(expectedContent);
+    });
+  });
+
+  it('Compute total directory size and rimraf work', async () => {
+    const root = cwd.test.testfiles.dir1.totalsizetest;
+    await root()
+      .asDir()
+      .rimraf();
+
+    let leveldir = root;
+    await leveldir()
+      .asDir()
+      .mkdir();
+
+    let expectedSize = 0;
+    for (let level = 1; level <= 5; level++) {
+      leveldir = leveldir['level' + level];
+      const dir = leveldir().asDir();
+      await dir.mkdir();
+      for (let filenum = 0; filenum < 5; filenum++) {
+        const file = leveldir[`file${filenum}.txt`]().asFile();
+        await file.write.txt(`Content of ${file.name} in ${dir.name}`);
+        const fileSize = (await file.stat()).size;
+        expectedSize += fileSize;
+      }
+    }
+    const actualTotalSize = await root()
+      .asDir()
+      .totalSize();
+    expect(actualTotalSize).toBe(expectedSize);
+    await root()
+      .asDir()
+      .rimraf();
+  });
 });
