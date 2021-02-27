@@ -113,12 +113,17 @@ export class FSFileWrite {
     await this.txt(JSON.stringify(obj));
   }
 
-  createWriteStream(options?: SecondArgument&lt;typeof createWriteStream>){
-    return createWriteStream(this.path, options)
+  /**
+   * Creates standart node fs WriteStream for this path.
+   * @param options - node fs.createWriteStream options
+   */
+  createWriteStream(options?: SecondArgument&lt;typeof createWriteStream>) {
+    return createWriteStream(this.path, options);
   }
 }
 
-type SecondArgument&lt;T> = T extends (arg1: any, arg2: infer U, ...args: any[]) => any ? U : any;</code></pre>
+type SecondArgument&lt;T> = T extends (arg1: any, arg2: infer U, ...args: any[]) => any ? U : any;
+</code></pre>
         </article>
     </section>
 

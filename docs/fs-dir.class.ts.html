@@ -131,7 +131,7 @@ export class FSDir {
    * Return async iterator which iterates all dirents in dir.
    * Chaining map, filter and forEach
    * operators available. toArray operator can be used for resulting chain to array.
-   * @returns {FSAsyncIterable}
+   * @returns {FSAsyncIterable&lt;Dirent>}
    */
   public dirents() {
     return new FSAsyncIterable(direntsGen(this.path));
@@ -215,6 +215,54 @@ export class FSDir {
         resolve(true);
       });
     });
+  }
+
+  /**
+   * Compute total size of this directory.
+   * @example &lt;caption>Total size of node_modules&lt;/caption>
+   *   console.log(
+   * 'Total size of node_modules is ' +
+   *   Math.floor(
+   *     (await cwd
+   *       .node_modules()
+   *       .asDir()
+   *       .totalSize()) /
+   *       1024 /
+   *       1024
+   *   ) +
+   *   ' MBytes'
+   * );
+   */
+  public async totalSize(): Promise&lt;number> {
+    let size = 0;
+    await this.files()
+      .map(async file => (await file.stat()).size)
+      .forEach(async fileSize => {
+        size += fileSize;
+      });
+
+    await this.subdirs()
+      .map(async dir => await dir.totalSize())
+      .forEach(async totalSize => {
+        size += totalSize;
+      });
+
+    return size;
+  }
+
+  /**
+   * Removes directory with all content
+   */
+  public async rimraf() {
+    if (await this.isExists()) {
+      await this.files().forEach(async file => {
+        await file.unlink();
+      });
+      await this.subdirs().forEach(async dir => {
+        await dir.rimraf();
+      });
+      await this.rmdir();
+    }
   }
 }
 </code></pre>

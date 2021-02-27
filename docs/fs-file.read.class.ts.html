@@ -87,6 +87,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>import { readFile, createReadStream } from 'fs';
 import { createInterface } from 'readline';
+import { FSAsyncIterable } from './fs-async-iterable.class';
 import { FSIterable } from './fs-iterable.class';
 /**
  * Contains methods, that reads from file
@@ -136,17 +137,17 @@ export class FSFileRead {
     });
     return iterable;
   }
-/**
- * Read csv as array of arrays
- * @param splitter 
- */
+  /**
+   * Read csv as array of arrays
+   * @param splitter
+   */
   public csvArrays(splitter: string): FSIterable&lt;string[]> {
     return this.lineByLine().map(line => line.split(splitter));
   }
 
   /**
    * Read csv as objects. Take first line as object keys
-   * @param splitter 
+   * @param splitter
    */
   public csvWithHeader(splitter: string): FSIterable&lt;Record&lt;string, string>> {
     const iter = this.csvArrays(splitter);
@@ -163,6 +164,42 @@ export class FSFileRead {
           return obj;
         }, {} as Record&lt;string, string>)
       );
+  }
+
+  public lineByLineAsync(): FSAsyncIterable&lt;string> {
+    const fileStream = createReadStream(this.path);
+    const readLine = createInterface({
+      input: fileStream,
+      crlfDelay: Infinity,
+    });
+    const reader = async function*() {
+      for await (const line of readLine) {
+        yield line;
+      }
+      fileStream.close();
+    };
+    return new FSAsyncIterable(reader());
+  }
+
+  public csvArraysAsync(splitter: string): FSAsyncIterable&lt;string[]> {
+    return this.lineByLineAsync().map(async line => line.split(splitter));
+  }
+
+  public csvWithHeaderAsync(splitter: string): FSAsyncIterable&lt;Record&lt;string, string>> {
+    const iter = this.csvArraysAsync(splitter)[Symbol.asyncIterator]();
+    const reader = async function*() {
+      const firstlineres = await iter.next();
+      if (!firstlineres.done) {
+        const firstline = firstlineres.value;
+        for await (const line of iter) {
+          yield firstline.reduce((obj, key, index) => {
+            obj[key] = line[index];
+            return obj;
+          }, {} as Record&lt;string, string>);
+        }
+      }
+    };
+    return new FSAsyncIterable(reader());
   }
 }
 </code></pre>

@@ -410,7 +410,7 @@
         <p class="tag-source">
             <a href="fs-dir.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-dir.class.ts.html">fs-dir.class.ts</a>, <a href="fs-dir.class.ts.html#line152">line 152</a>
+                <a href="fs-dir.class.ts.html">fs-dir.class.ts</a>, <a href="fs-dir.class.ts.html#line196">line 196</a>
             </span>
         </p>
     
@@ -556,7 +556,7 @@
         <p class="tag-source">
             <a href="fs-dir.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-dir.class.ts.html">fs-dir.class.ts</a>, <a href="fs-dir.class.ts.html#line145">line 145</a>
+                <a href="fs-dir.class.ts.html">fs-dir.class.ts</a>, <a href="fs-dir.class.ts.html#line189">line 189</a>
             </span>
         </p>
     
@@ -586,7 +586,7 @@
         
         <span class="code-name">
             
-                dirents<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="FSAsyncIterable.html">FSAsyncIterable</a>}</span>
+                dirents<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="FSAsyncIterable.html">FSAsyncIterable</a>.&lt;Dirent>}</span>
             
         </span>
     </h4>
@@ -681,7 +681,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type"><a href="FSAsyncIterable.html">FSAsyncIterable</a></span>
+<span class="param-type"><a href="FSAsyncIterable.html">FSAsyncIterable</a>.&lt;Dirent></span>
 
 
     </div>
@@ -1100,6 +1100,107 @@
 
 
     
+    <h4 class="name" id="rimraf">
+        <a class="href-link" href="#rimraf">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                rimraf<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Removes directory with all content
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="fs-dir.class.ts.html" class="button">View Source</a>
+            <span>
+                <a href="fs-dir.class.ts.html">fs-dir.class.ts</a>, <a href="fs-dir.class.ts.html#line163">line 163</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
     <h4 class="name" id="rmdir">
         <a class="href-link" href="#rmdir">#</a>
         
@@ -1375,6 +1476,116 @@
     
     
         <pre class="prettyprint"><code>const { cwd } = require('fstb');cwd .node_modules() .asDir() .subdirs(true) .map(async dir => dir.fspath['package.json']().asFile()) .filter(async package_json => await package_json.isReadable()) .map(async package_json => await package_json.read.json()) .forEach(async content => console.log(`${content.name}@${content.version}`));</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="totalSize">
+        <a class="href-link" href="#totalSize">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                totalSize<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Compute total size of this directory.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="fs-dir.class.ts.html" class="button">View Source</a>
+            <span>
+                <a href="fs-dir.class.ts.html">fs-dir.class.ts</a>, <a href="fs-dir.class.ts.html#line146">line 146</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Total size of node_modules</p>
+    
+    
+        <pre class="prettyprint"><code>  console.log('Total size of node_modules is ' +  Math.floor(    (await cwd      .node_modules()      .asDir()      .totalSize()) /      1024 /      1024  ) +  ' MBytes');</code></pre>
     
 
 
