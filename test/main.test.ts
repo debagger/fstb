@@ -4,6 +4,16 @@ import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
 import { EOL } from 'os';
 
+const strSort = (a: string, b: string) => {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+};
+
 describe('FSPath', () => {
   it('Join path as prop name', () => {
     expect(FSPath('/aaa').bbb().path).toEqual(join('/aaa', '/bbb'));
@@ -12,16 +22,6 @@ describe('FSPath', () => {
   it('Join path as key', () => {
     expect(FSPath('/aaa')['bbb.json']().path).toEqual(join('/aaa', 'bbb.json'));
   });
-
-  const strSort = (a: string, b: string) => {
-    if (a < b) {
-      return -1;
-    }
-    if (a > b) {
-      return 1;
-    }
-    return 0;
-  };
 
   it('map files in dir', async () => {
     const dirents = await new Promise<Dirent[]>((resolve, reject) => {
@@ -141,6 +141,7 @@ describe('FSPath', () => {
 
     expect(await testdir.isExists()).not.toBeTruthy();
   });
+
   it('subdir', async () => {
     const dirnames = await cwd.test
       .testfiles()
@@ -230,6 +231,7 @@ describe('FSPath', () => {
       .asDir()
       .rimraf();
   });
+  
   it('append file', async () => {
     const file = cwd.test.testfiles['append-test.txt']().asFile();
     if (await file.isExists()) {
