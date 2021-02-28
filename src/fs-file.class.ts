@@ -1,7 +1,8 @@
 import { stat, Stats, access, constants, unlink } from 'fs';
-import { basename } from 'path';
+import { basename, dirname } from 'path';
 import { FSFileWrite } from './fs-file.write.class';
 import { FSFileRead } from './fs-file.read.class';
+import { FSDir } from './fs-dir.class';
 
 /**
  * Contains all methods to work with files.
@@ -13,6 +14,12 @@ export class FSFile {
    * Contains file name.
    */
   public readonly name = basename(this.path);
+
+  /**
+   * Returns directory wich contains this file
+   * @type {FSDir}
+   */
+  public readonly fsdir: FSDir = new FSDir(dirname(this.path));
 
   /**
    * Contains all methods for file read.
