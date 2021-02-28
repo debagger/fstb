@@ -2,7 +2,7 @@ import { FSPath, cwd } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
-import {EOL} from "os"
+import { EOL } from 'os';
 
 describe('FSPath', () => {
   it('Join path as prop name', () => {
@@ -247,6 +247,6 @@ describe('FSPath', () => {
 
     expect(actual).toStrictEqual(content);
 
-    await file.unlink()
+    await file.unlink();
   });
 });
