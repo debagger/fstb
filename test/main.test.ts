@@ -1,4 +1,4 @@
-import { FSPath, cwd } from '../src';
+import { FSPath, cwd, mkdtemp } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
@@ -251,4 +251,14 @@ describe('FSPath', () => {
 
     await file.unlink();
   });
+
+  it("creates temp dir", async()=>{
+    const tmp_pref = await mkdtemp("fstb");
+    expect(await tmp_pref.isExists()).toBeTruthy()
+    await tmp_pref.rmdir()
+    const tmp_nopref = await mkdtemp();
+    expect(await tmp_nopref.isExists()).toBeTruthy()
+    await tmp_nopref.rmdir()
+    
+  })
 });
