@@ -1,4 +1,5 @@
 import { join, basename } from 'path';
+import { mkdtemp as fsmkdtemp } from 'fs';
 import { homedir, tmpdir } from 'os';
 import { FSDir } from './fs-dir.class';
 import { FSFile } from './fs-file.class';
@@ -71,3 +72,20 @@ export const home = FSPath(homedir());
  * Shortcut for FSPath(tmpdir())
  */
 export const tmp = FSPath(tmpdir());
+
+/**
+ * Creates a unique temporary directory.
+ * Generates six random characters to be appended behind a required prefix to create a unique temporary directory. 
+ * Due to platform inconsistencies, avoid trailing X characters in prefix. 
+ * Some platforms, notably the BSDs, can return more than six random characters, 
+ * and replace trailing X characters in prefix with random characters.
+ * The created directory path is passed as a string to the callback's second parameter.
+ * @param prefix 
+ */
+export const mkdtemp = async (prefix: string) =>
+  new Promise<FSPathType>((resolve, reject) => {
+    fsmkdtemp(prefix, (err, path) => {
+      if (err) return reject(err);
+      resolve(FSPath(path));
+    });
+  });
