@@ -78,9 +78,9 @@ export class FSFileRead {
         }, {} as Record<string, string>)
       );
   }
-/**
- * Read text file line-by-line with async iterator
- */
+  /**
+   * Read text file line-by-line with async iterator
+   */
   public lineByLineAsync(): FSAsyncIterable<string> {
     const fileStream = createReadStream(this.path);
     const readLine = createInterface({
@@ -97,7 +97,7 @@ export class FSFileRead {
   }
 
   /**
-   * Read csv file as splitted strings array line-by-line with async iterator. 
+   * Read csv file as splitted strings array line-by-line with async iterator.
    * @param splitter - text symbol whis used as delimeter
    */
   public csvArraysAsync(splitter: string): FSAsyncIterable<string[]> {
@@ -124,4 +124,4 @@ export class FSFileRead {
     };
     return new FSAsyncIterable(reader());
   }
-} 
+}
