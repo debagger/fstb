@@ -215,7 +215,7 @@
         <p class="tag-source">
             <a href="index.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line52">line 52</a>
+                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line53">line 53</a>
             </span>
         </p>
     
@@ -288,7 +288,7 @@
         <p class="tag-source">
             <a href="index.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line56">line 56</a>
+                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line57">line 57</a>
             </span>
         </p>
     
@@ -319,7 +319,7 @@
 
 
 <div class="description">
-    Creates path to filesystem object. Can be chained with anykey name wich act as path segment.
+    Creates path to filesystem object. Can be chained with anykey name wich act as path segment.WARNING: Do not return FSPath with Promise resolve. This leads to unexpected behavior.
 </div>
 
 
@@ -361,7 +361,7 @@
         <p class="tag-source">
             <a href="index.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line44">line 44</a>
+                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line45">line 45</a>
             </span>
         </p>
     
@@ -374,7 +374,7 @@
     <h5>Example</h5>
     
     
-        <pre class="prettyprint"><code>FSPath(__dirname).node_modules //work as path.join(__dirname, "node_modules")FSPath(__dirname)["package.json"] //work as path.join(__dirname, "package.json")// When path completed you can get further operation to call it as function.FSPath(__dirname).node_modules().asDir()FSPath(__dirname)["package.json"]().asFile()//At this point you can use FSDir</code></pre>
+        <pre class="prettyprint"><code>FSPath(__dirname).node_modules //work as path.join(__dirname, "node_modules")FSPath(__dirname)["package.json"] //work as path.join(__dirname, "package.json")// When path completed you can get further operation to call it as function.FSPath(__dirname).node_modules().asDir() //At this point you can use FSDirFSPath(__dirname)["package.json"]().asFile() //At this point you can use FSFile</code></pre>
     
 
 
@@ -441,7 +441,7 @@
         <p class="tag-source">
             <a href="index.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line60">line 60</a>
+                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line61">line 61</a>
             </span>
         </p>
     
@@ -472,7 +472,7 @@
 
 
 <div class="description">
-    Creates a unique temporary directory.Generates six random characters to be appended behind a required prefix to create a unique temporary directory.Due to platform inconsistencies, avoid trailing X characters in prefix.Some platforms, notably the BSDs, can return more than six random characters,and replace trailing X characters in prefix with random characters.The created directory path is passed as a string to the callback's second parameter.
+    Creates a unique temporary directory inside os tmpdir.Generates six random characters to be appended behind a required prefix to create a unique temporary directory.Due to platform inconsistencies, avoid trailing X characters in prefix.Some platforms, notably the BSDs, can return more than six random characters,and replace trailing X characters in prefix with random characters.The created directory path is passed as a string to the callback's second parameter.
 </div>
 
 
@@ -514,7 +514,7 @@
         <p class="tag-source">
             <a href="index.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line74">line 74</a>
+                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line75">line 75</a>
             </span>
         </p>
     
@@ -587,7 +587,7 @@
         <p class="tag-source">
             <a href="index.ts.html" class="button">View Source</a>
             <span>
-                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line64">line 64</a>
+                <a href="index.ts.html">index.ts</a>, <a href="index.ts.html#line65">line 65</a>
             </span>
         </p>
     
