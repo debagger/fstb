@@ -97,7 +97,7 @@ export class FSIterable&lt;T> {
   };
 
   /**
-   * Finish chain
+   * Call when all items pushed
    */
   public end: () => void = () => {
     throw new Error('Define operation first');
@@ -135,6 +135,25 @@ export class FSIterable&lt;T> {
   }
 
   /**
+   * Calls the specified callback function for all the input elements.
+   * The return value of the callback function is the accumulated result,
+   * and is provided as an argument in the next call to the callback function.
+   * @param callback A function that accepts up to four arguments.
+   * The reduce method calls the callbackfn function one time for each element in the array.
+   * @param initialValue initialValue is used as the initial value to start the accumulation.
+   * The first call to the callbackfn function provides this value as an argument.
+   */
+  async reduce&lt;U>(callback: (previousValue: U, currentValue: T) => U, initialValue: U): Promise&lt;U> {
+    let previousValue = initialValue;
+    this.push = item => {
+      previousValue = callback(previousValue, item);
+    };
+    return new Promise(resolve => {
+      this.end = () => resolve(previousValue);
+    });
+  }
+
+  /**
    * The forEach() method executes a provided function once for each array element
    * @param callback - function performs with each input item
    */
@@ -148,11 +167,10 @@ export class FSIterable&lt;T> {
    *The toArray() method collect iterator items to array.
    */
   async toArray() {
-    return new Promise&lt;T[]>(resolve => {
-      const arr: T[] = [];
-      this.push = (item: T) => arr.push(item);
-      this.end = () => resolve(arr);
-    });
+    return await this.reduce((acc, item) => {
+      acc.push(item);
+      return acc;
+    }, [] as T[]);
   }
 }
 </code></pre>
