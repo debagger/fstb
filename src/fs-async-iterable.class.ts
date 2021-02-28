@@ -1,5 +1,5 @@
 /**
- * This is util class not inteded to use directly, It used for iterate try dirents.
+ * This is util class not inteded to use directly, It used for iterate through dirents.
  */
 export class FSAsyncIterable<T> implements AsyncIterable<T> {
   constructor(private readonly iterable: AsyncGenerator<T>) {}

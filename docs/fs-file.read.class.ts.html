@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
                 
             </nav>
         </div>
@@ -119,7 +119,7 @@ export class FSFileRead {
 
   /**
    * Read text files line by line
-   * @returns {FSAsyncIterable&lt;string>}
+   * @returns {FSIterable&lt;string>}
    */
   public lineByLine(): FSIterable&lt;string> {
     const fileStream = createReadStream(this.path);
@@ -140,6 +140,7 @@ export class FSFileRead {
   /**
    * Read csv as array of arrays
    * @param splitter
+   * @returns {FSIterable&lt;string[]>}
    */
   public csvArrays(splitter: string): FSIterable&lt;string[]> {
     return this.lineByLine().map(line => line.split(splitter));
@@ -148,6 +149,7 @@ export class FSFileRead {
   /**
    * Read csv as objects. Take first line as object keys
    * @param splitter
+   * @returns {FSIterable&lt;Record&lt;string,string>>}
    */
   public csvWithHeader(splitter: string): FSIterable&lt;Record&lt;string, string>> {
     const iter = this.csvArrays(splitter);
@@ -185,7 +187,8 @@ export class FSFileRead {
 
   /**
    * Read csv file as splitted strings array line-by-line with async iterator.
-   * @param splitter - text symbol whis used as delimeter
+   * @param splitter - text symbol which used as delimeter
+   * @returns {FSAsyncIterable&lt;string[]>}
    */
   public csvArraysAsync(splitter: string): FSAsyncIterable&lt;string[]> {
     return this.lineByLineAsync().map(async line => line.split(splitter));
@@ -193,7 +196,8 @@ export class FSFileRead {
 
   /**
    * Read csv files and converts it to objects with keys from first line of file
-   * @param splitter - text symbol whis used as delimeter
+   * @param splitter - text symbol which used as delimeter
+   * @returns {FSAsyncIterable&lt;Record&lt;string, string>>}
    */
   public csvWithHeaderAsync(splitter: string): FSAsyncIterable&lt;Record&lt;string, string>> {
     const iter = this.csvArraysAsync(splitter)[Symbol.asyncIterator]();
