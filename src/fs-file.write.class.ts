@@ -1,4 +1,4 @@
-import { writeFile, createWriteStream } from 'fs';
+import { writeFile, createWriteStream, appendFile, WriteFileOptions } from 'fs';
 /**
  * Contains methods that write to file
  */
@@ -32,6 +32,25 @@ export class FSFileWrite {
    */
   createWriteStream(options?: SecondArgument<typeof createWriteStream>) {
     return createWriteStream(this.path, options);
+  }
+
+  /**
+   * Asynchronously append data to a file, creating the file if it does not yet exist.
+   * @param data - string or Buffer to append
+   * @param options
+   */
+  async appendFile(data: string | Buffer, options?: WriteFileOptions) {
+    return new Promise<void>((resolve, reject) => {
+      const cb = (err: Error | null) => {
+        if (err) return reject(err);
+        resolve();
+      };
+      if (options) {
+        appendFile(this.path, data, options, cb);
+      } else {
+        appendFile(this.path, data, cb);
+      }
+    });
   }
 }
 

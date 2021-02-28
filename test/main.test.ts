@@ -2,6 +2,7 @@ import { FSPath, cwd } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
+import {EOL} from "os"
 
 describe('FSPath', () => {
   it('Join path as prop name', () => {
@@ -228,5 +229,24 @@ describe('FSPath', () => {
     await root()
       .asDir()
       .rimraf();
+  });
+  it('append file', async () => {
+    const file = cwd.test.testfiles['append-test.txt']().asFile();
+    if (await file.isExists()) {
+      await file.unlink();
+    }
+    const content = [];
+    for (let i = 1; i <= 10; i++) {
+      content.push(`Test string ${i}`);
+    }
+
+    for (const line of content) {
+      await file.write.appendFile(line + EOL);
+    }
+    const actual = await file.read.lineByLine().toArray();
+
+    expect(actual).toStrictEqual(content);
+
+    await file.unlink()
   });
 });
