@@ -231,7 +231,7 @@ describe('FSPath', () => {
       .asDir()
       .rimraf();
   });
-  
+
   it('append file', async () => {
     const file = cwd.test.testfiles['append-test.txt']().asFile();
     if (await file.isExists()) {
@@ -252,13 +252,12 @@ describe('FSPath', () => {
     await file.unlink();
   });
 
-  it("creates temp dir", async()=>{
-    const tmp_pref = await mkdtemp("fstb");
-    expect(await tmp_pref.isExists()).toBeTruthy()
-    await tmp_pref.rmdir()
+  it('creates temp dir', async () => {
+    const tmp_pref = await mkdtemp('fstb');
+    expect(await tmp_pref.isExists()).toBeTruthy();
+    await tmp_pref.rmdir();
     const tmp_nopref = await mkdtemp();
-    expect(await tmp_nopref.isExists()).toBeTruthy()
-    await tmp_nopref.rmdir()
-    
-  })
+    expect(await tmp_nopref.isExists()).toBeTruthy();
+    await tmp_nopref.rmdir();
+  });
 });
