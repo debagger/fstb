@@ -5,20 +5,19 @@ const fs = require('fs');
 const rl = require('readline');
 
 (async function() {
-  const modules = await cwd
+  const stream = cwd['hashlist.csv']()
+    .asFile()
+    .write.createWriteStream({ autoClose: true });
+  stream.write('hash,path\n');
+  await cwd
     .node_modules()
     .asDir()
-    .subdirs()
-    .map(async dir => dir.fspath['package.json']().asFile())
-    .filter(async package_json => await package_json.isReadable())
-    .map(async package_json => ({
-      dirSize: await package_json.fsdir.totalSize(),
-      name: (await package_json.read.json()).name,
-
-    }))
-    .toArray();
-  modules.sort((a, b) => a.dirSize - b.dirSize);
-  console.table(modules);
+    .subdirs(true)
+    .forEach(async dir => {
+      dir.files().forEach(async file => {
+        stream.write(`${await file.hash.md5()},${file.path}\n`);
+      });
+    });
 })();
 
 // cwd["README.md"]().asFile().read.lineByLine().forEach(line=>console.log(line));

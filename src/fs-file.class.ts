@@ -3,6 +3,7 @@ import { basename, dirname } from 'path';
 import { FSFileWrite } from './fs-file.write.class';
 import { FSFileRead } from './fs-file.read.class';
 import { FSDir } from './fs-dir.class';
+import { FSFileHash } from './fs-file.hash.class';
 
 /**
  * Contains all methods to work with files.
@@ -32,6 +33,11 @@ export class FSFile {
    * @type {FSFileWrite}
    */
   public write: FSFileWrite = new FSFileWrite(this.path);
+  
+  /**
+   *
+   */
+  public hash: FSFileHash = new FSFileHash(this.path);
 
   /**
    * Returns file Stats object
