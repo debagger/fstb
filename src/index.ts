@@ -93,3 +93,18 @@ export const mkdtemp = async (prefix?: string) => {
   });
   return temppath;
 };
+
+/**
+ * Returns FSPath for environment variable.
+ * If environment variable whith given name not exists,
+ * Then return FSPath for provided fallback value,
+ * if no fallback value provided then returns nothing
+ * @param {string} envVariableName
+ * @param {string} fallbackValue
+ */
+export const envPath = (envVariableName: string, fallbackValue?: string): FSPathType => {
+  let envVar = process.env[envVariableName];
+  if (envVar) return FSPath(envVar);
+  if (fallbackValue) return FSPath(fallbackValue);
+  throw Error(`Not found process.env[${envVariableName}] and fallback value didnt provided.`);
+};

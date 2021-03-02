@@ -1,4 +1,4 @@
-import { FSPath, cwd, mkdtemp } from '../src';
+import { FSPath, cwd, mkdtemp, envPath } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
@@ -259,5 +259,15 @@ describe('FSPath', () => {
     const tmp_nopref = await mkdtemp();
     expect(await tmp_nopref.isExists()).toBeTruthy();
     await tmp_nopref.rmdir();
+  });
+
+  it('Make FSPath from environment var', () => {
+    expect(() => envPath('VAR_NO_EXIST')).toThrow();
+    const fallback = '/root/test1/test2';
+    expect(envPath('VAR_NO_EXIST', fallback)().path).toBe(fallback);
+    const expectPath = '/root/test2/test1';
+    process.env['VAR_EXIST'] = expectPath;
+    expect(envPath('VAR_EXIST')().path).toBe(expectPath);
+    expect(envPath('VAR_EXIST', fallback)().path).toBe(expectPath);
   });
 });
