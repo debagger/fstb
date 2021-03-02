@@ -33,7 +33,7 @@ export class FSFile {
    * @type {FSFileWrite}
    */
   public write: FSFileWrite = new FSFileWrite(this.path);
-  
+
   /**
    *
    */
