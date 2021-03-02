@@ -11,5 +11,8 @@
   "source": {
     "include": ["./src"],
     "includePattern": "\\.(jsx|js|ts|tsx)$"
+  },
+  "better-docs": {
+    "name": "FSTB Documentation"
   }
 }
