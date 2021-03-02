@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#envPath">envPath</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
                 
             </nav>
         </div>
@@ -179,6 +179,21 @@ export const mkdtemp = async (prefix?: string) => {
     });
   });
   return temppath;
+};
+
+/**
+ * Returns FSPath for environment variable.
+ * If environment variable whith given name not exists,
+ * Then return FSPath for provided fallback value,
+ * if no fallback value provided then returns nothing
+ * @param {string} envVariableName
+ * @param {string} fallbackValue
+ */
+export const envPath = (envVariableName: string, fallbackValue?: string): FSPathType => {
+  let envVar = process.env[envVariableName];
+  if (envVar) return FSPath(envVar);
+  if (fallbackValue) return FSPath(fallbackValue);
+  throw Error(`Not found process.env[${envVariableName}] and fallback value didnt provided.`);
 };
 </code></pre>
         </article>
