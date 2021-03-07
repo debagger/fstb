@@ -3,6 +3,7 @@ import { mkdtemp as fsmkdtemp } from 'fs';
 import { homedir, tmpdir } from 'os';
 import { FSDir } from './fs-dir.class';
 import { FSFile } from './fs-file.class';
+import { FSAsyncIterable } from './fs-async-iterable.class';
 
 /**
  * Represent dirent which can be converted to FSDir or FSFile.
@@ -107,4 +108,13 @@ export const envPath = (envVariableName: string, fallbackValue?: string): FSPath
   if (envVar) return FSPath(envVar);
   if (fallbackValue) return FSPath(fallbackValue);
   throw Error(`Not found process.env[${envVariableName}] and fallback value didnt provided.`);
+};
+
+export const range = (from: number, to: number) => {
+  const rangeGenerator = async function*() {
+    for (let index = from; index <= to; index++) {
+      yield index;
+    }
+  };
+  return new FSAsyncIterable(rangeGenerator());
 };
