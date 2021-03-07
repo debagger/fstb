@@ -1,4 +1,4 @@
-import { writeFile, createWriteStream, appendFile, WriteFileOptions } from 'fs';
+import { writeFile, createWriteStream, appendFile, WriteFileOptions, WriteStream } from 'fs';
 /**
  * Contains methods that write to file
  */
@@ -27,11 +27,20 @@ export class FSFileWrite {
   }
 
   /**
-   * Creates standart node fs WriteStream for this path.
+   * Creates fs WriteStream for this path.
    * @param options - node fs.createWriteStream options
+   * @returns thenable stream, which resolves on stream close
    */
   createWriteStream(options?: SecondArgument<typeof createWriteStream>) {
-    return createWriteStream(this.path, options);
+    const stream = createWriteStream(this.path, options) as WriteStream & PromiseLike<void>;
+    const promise = new Promise<void>((resolve, reject) => {
+      stream.on('close', () => {
+        resolve();
+      });
+      stream.on('error', err => reject(err));
+    });
+    stream.then = promise.then.bind(promise);
+    return stream;
   }
 
   /**

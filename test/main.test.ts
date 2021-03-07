@@ -1,8 +1,9 @@
-import { FSPath, cwd, mkdtemp, envPath } from '../src';
+import { FSPath, cwd, mkdtemp, envPath, range } from '../src';
 import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
 import { EOL } from 'os';
+const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 
 const strSort = (a: string, b: string) => {
   if (a < b) {
@@ -92,8 +93,6 @@ describe('FSPath', () => {
   });
 
   it('async iterator maps', async () => {
-    const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
-
     const gen = async function*() {
       for (let index = 0; index < 3; index++) {
         await sleep(100);
@@ -269,5 +268,26 @@ describe('FSPath', () => {
     process.env['VAR_EXIST'] = expectPath;
     expect(envPath('VAR_EXIST')().path).toBe(expectPath);
     expect(envPath('VAR_EXIST', fallback)().path).toBe(expectPath);
+  });
+
+  it('can use writestream as promise', async () => {
+    const file = cwd.test.testfiles['test-promise-ws.txt']().asFile();
+    if (await file.isExists()) await file.unlink();
+    const stream = file.write.createWriteStream();
+    setImmediate(() => {
+      range(1, 10)
+        .forEach(async i => {
+          await sleep(100);
+          stream.write(i.toString() + '\n');
+        })
+        .then(() => {
+          stream.end();
+        });
+    });
+    await stream;
+    const expected = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    const actual = await file.read.lineByLine().toArray();
+    expect(actual).toEqual(expected);
+    await file.unlink();
   });
 });
