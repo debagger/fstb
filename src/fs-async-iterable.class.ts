@@ -7,9 +7,11 @@ export class FSAsyncIterable<T> implements AsyncIterable<T> {
   [Symbol.asyncIterator]() {
     return this.iterable;
   }
+
   /**
    * Transform input items
-   * @param callback - async function (must return Promise), which transform input item to output item
+   * @param callback - async function (must return Promise),
+   * which transform input item to output item
    */
   map<P>(callback: (item: T) => Promise<P>) {
     const iterable = this.iterable;
@@ -56,11 +58,19 @@ export class FSAsyncIterable<T> implements AsyncIterable<T> {
   /**
    * The forEach() method executes a provided function once for each array element
    * @param callback - async function (must return Promise).
+   * @param parallel - max items, that can be processed at same time. Optional parameter, equals 1 by default
    */
-  async forEach(callback: (item: T) => Promise<void>) {
+  async forEach(callback: (item: T) => Promise<void>, parallel: number = 1) {
+    const activePromises = new Set();
     for await (const item of this.iterable) {
-      await callback(item);
+      const currentPromise = callback(item);
+      activePromises.add(currentPromise);
+      currentPromise.finally(() => {
+        activePromises.delete(currentPromise);
+      });
+      if (activePromises.size >= parallel) await Promise.race(activePromises);
     }
+    await Promise.allSettled(activePromises);
   }
   /**
    *The toArray() method collect itertor items to array.

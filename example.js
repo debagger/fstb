@@ -1,23 +1,28 @@
-const { cwd } = require('./dist/index');
+const { cwd, range } = require('./dist/index');
 const { once } = require('events');
 const { resolve, join } = require('path');
 const fs = require('fs');
 const rl = require('readline');
 
 (async function() {
-  const stream = cwd['hashlist.csv']()
-    .asFile()
-    .write.createWriteStream({ autoClose: true });
-  stream.write('hash,path\n');
-  await cwd
-    .node_modules()
-    .asDir()
-    .subdirs(true)
-    .forEach(async dir => {
-      dir.files().forEach(async file => {
-        stream.write(`${await file.hash.md5()},${file.path}\n`);
-      });
-    });
+  const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+  await range(0, 100).forEach(async i => {
+    await sleep(Math.floor(Math.random() * 1000));
+    console.log(i);
+  }, 1);
+  // const stream = cwd['hashlist.csv']()
+  //   .asFile()
+  //   .write.createWriteStream({ autoClose: true });
+  // stream.write('hash,path\n');
+  // await cwd
+  //   .node_modules()
+  //   .asDir()
+  //   .subdirs(true)
+  //   .forEach(async dir => {
+  //     dir.files().forEach(async file => {
+  //       stream.write(`${await file.hash.md5()},${file.path}\n`);
+  //     });
+  //   });
 })();
 
 // cwd["README.md"]().asFile().read.lineByLine().forEach(line=>console.log(line));
