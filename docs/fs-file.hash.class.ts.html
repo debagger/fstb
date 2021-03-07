@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> fs-file.read.class.ts</title>
+  <title> fs-file.hash.class.ts</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>fs-file.read.class.ts</h1>
+                    <h1>fs-file.hash.class.ts</h1>
                 </header>
                 
 
@@ -85,135 +85,61 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { readFile, createReadStream } from 'fs';
-import { createInterface } from 'readline';
-import { FSAsyncIterable } from './fs-async-iterable.class';
-import { FSIterable } from './fs-iterable.class';
+            <pre class="prettyprint source linenums"><code>import { createReadStream } from 'fs';
+import { createHash, BinaryToTextEncoding } from 'crypto';
 /**
- * Contains methods, that reads from file
+ *
  */
-export class FSFileRead {
+export class FSFileHash {
   constructor(public readonly path: string) {}
-
   /**
-   * Returns all file content as string. On error trows throws
-   * NodeJS.ErrnoException
-   * @returns {Promise&lt;string>}
+   *
+   * @param algorithm
+   * @param digestEnc
    */
-  public async txt(): Promise&lt;string> {
-    return new Promise&lt;string>((resolve, reject) => {
-      readFile(this.path, (err, data) => {
-        if (err) return reject(err);
-        resolve(data.toString());
-      });
+  async hash(algorithm: string, digestEnc: BinaryToTextEncoding) {
+    return new Promise&lt;string>((reslove, reject) => {
+      const hsum = createHash(algorithm);
+      const stream = createReadStream(this.path);
+      stream.on('data', chunk => hsum.update(chunk));
+      stream.on('end', () => reslove(hsum.digest(digestEnc)));
+      stream.on('error', err => reject(err));
     });
   }
-
   /**
-   * Read file and parses it to json object
-   * @returns {Promise&lt;any>}
+   *
+   * @param digestEnc
    */
-  public async json(): Promise&lt;any> {
-    return JSON.parse(await this.txt());
-  }
-
-  /**
-   * Read text files line by line
-   * @returns {FSIterable&lt;string>}
-   */
-  public lineByLine(): FSIterable&lt;string> {
-    const fileStream = createReadStream(this.path);
-    const readLine = createInterface({
-      input: fileStream,
-      crlfDelay: Infinity,
-    });
-    const iterable = new FSIterable&lt;string>();
-
-    readLine.on('line', line => {
-      iterable.push(line);
-    });
-    readLine.on('close', () => {
-      iterable.end();
-    });
-    return iterable;
+  async md4(digestEnc?: BinaryToTextEncoding) {
+    return await this.hash('md4', digestEnc ? digestEnc : 'hex');
   }
   /**
-   * Read csv as array of arrays
-   * @param splitter
-   * @returns {FSIterable&lt;string[]>}
+   *
+   * @param digestEnc
    */
-  public csvArrays(splitter: string): FSIterable&lt;string[]> {
-    return this.lineByLine().map(line => line.split(splitter));
-  }
-
-  /**
-   * Read csv as objects. Take first line as object keys
-   * @param splitter
-   * @returns {FSIterable&lt;Record&lt;string,string>>}
-   */
-  public csvWithHeader(splitter: string): FSIterable&lt;Record&lt;string, string>> {
-    const iter = this.csvArrays(splitter);
-    let header: string[];
-    return iter
-      .filter(item => {
-        if (header) return true;
-        header = item;
-        return false;
-      })
-      .map(line =>
-        header.reduce((obj, key, index) => {
-          obj[key] = line[index];
-          return obj;
-        }, {} as Record&lt;string, string>)
-      );
+  async md5(digestEnc?: BinaryToTextEncoding) {
+    return await this.hash('md5', digestEnc ? digestEnc : 'hex');
   }
   /**
-   * Read text file line-by-line with async iterator
+   *
+   * @param digestEnc
    */
-  public lineByLineAsync(): FSAsyncIterable&lt;string> {
-    const fileStream = createReadStream(this.path);
-    const readLine = createInterface({
-      input: fileStream,
-      crlfDelay: Infinity,
-    });
-    const reader = async function*() {
-      for await (const line of readLine) {
-        yield line;
-      }
-      fileStream.close();
-    };
-    return new FSAsyncIterable(reader());
+  async sha1(digestEnc?: BinaryToTextEncoding) {
+    return await this.hash('sha1', digestEnc ? digestEnc : 'hex');
   }
-
   /**
-   * Read csv file as splitted strings array line-by-line with async iterator.
-   * @param splitter - text symbol which used as delimeter
-   * @returns {FSAsyncIterable&lt;string[]>}
+   *
+   * @param digestEnc
    */
-  public csvArraysAsync(splitter: string): FSAsyncIterable&lt;string[]> {
-    return this.lineByLineAsync().map(async line => line.split(splitter));
+  async sha256(digestEnc?: BinaryToTextEncoding) {
+    return await this.hash('sha256', digestEnc ? digestEnc : 'hex');
   }
-
   /**
-   * Read csv files and converts it to objects with keys from first line of file
-   * @param splitter - text symbol which used as delimeter
-   * @returns {FSAsyncIterable&lt;Record&lt;string, string>>}
+   *
+   * @param digestEnc
    */
-  public csvWithHeaderAsync(splitter: string): FSAsyncIterable&lt;Record&lt;string, string>> {
-    const iter = this.csvArraysAsync(splitter)[Symbol.asyncIterator]();
-    const reader = async function*() {
-      const firstlineres = await iter.next();
-      if (!firstlineres.done) {
-        const firstline = firstlineres.value;
-        for await (const line of iter) {
-          yield firstline.reduce((obj, key, index) => {
-            obj[key] = line[index];
-            return obj;
-          }, {} as Record&lt;string, string>);
-        }
-      }
-    };
-    return new FSAsyncIterable(reader());
+  async sha512(digestEnc?: BinaryToTextEncoding) {
+    return await this.hash('sha512', digestEnc ? digestEnc : 'hex');
   }
 }
 </code></pre>

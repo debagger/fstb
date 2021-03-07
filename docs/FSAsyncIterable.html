@@ -66,7 +66,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#envPath">envPath</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileHash.html">FSFileHash</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#envPath">envPath</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#range">range</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
                 
             </nav>
         </div>
@@ -342,7 +342,7 @@
         <p class="tag-source">
             <a href="fs-async-iterable.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line29">line 29</a>
+                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line30">line 30</a>
             </span>
         </p>
     
@@ -383,7 +383,7 @@
         
         <span class="code-name">
             
-                forEach<span class="signature">(callback)</span><span class="type-signature"></span>
+                forEach<span class="signature">(callback, parallel)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -419,6 +419,8 @@
             
 
             
+            <th>Default</th>
+            
 
             <th class="last">Description</th>
         </tr>
@@ -440,8 +442,38 @@
   
 
   
+      <td class="default">
+      
+      </td>
+  
 
   <td class="description last">async function (must return Promise).</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>parallel</code></td>
+  
+
+  <td class="type">
+  
+  </td>
+
+  
+
+  
+      <td class="default">
+      
+          1
+      
+      </td>
+  
+
+  <td class="description last">max items, that can be processed at same time. Optional parameter, equals 1 by default</td>
 </tr>
 
 
@@ -489,7 +521,7 @@
         <p class="tag-source">
             <a href="fs-async-iterable.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line60">line 60</a>
+                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line62">line 62</a>
             </span>
         </p>
     
@@ -584,7 +616,7 @@
 
   
 
-  <td class="description last">async function (must return Promise), which transform input item to output item</td>
+  <td class="description last">async function (must return Promise),which transform input item to output item</td>
 </tr>
 
 
@@ -632,7 +664,7 @@
         <p class="tag-source">
             <a href="fs-async-iterable.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line16">line 16</a>
+                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line17">line 17</a>
             </span>
         </p>
     
@@ -799,7 +831,7 @@
         <p class="tag-source">
             <a href="fs-async-iterable.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line49">line 49</a>
+                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line50">line 50</a>
             </span>
         </p>
     
@@ -900,7 +932,7 @@
         <p class="tag-source">
             <a href="fs-async-iterable.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line68">line 68</a>
+                <a href="fs-async-iterable.class.ts.html">fs-async-iterable.class.ts</a>, <a href="fs-async-iterable.class.ts.html#line82">line 82</a>
             </span>
         </p>
     

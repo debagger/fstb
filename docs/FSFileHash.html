@@ -5,7 +5,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> FSFileWrite</title>
+  <title> FSFileHash</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -74,7 +74,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Class</p>
-                    <h1>FSFileWrite</h1>
+                    <h1>FSFileHash</h1>
                 </header>
                 
 
@@ -85,9 +85,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>FSFileWrite<span class="signature">()</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Contains methods that write to file</div>
+        <h2><span class="attribs"><span class="type-signature"></span></span>FSFileHash<span class="signature">()</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -106,12 +104,12 @@
 
 
     
-    <h4 class="name" id="FSFileWrite">
-        <a class="href-link" href="#FSFileWrite">#</a>
+    <h4 class="name" id="FSFileHash">
+        <a class="href-link" href="#FSFileHash">#</a>
         
         <span class="code-name">
             
-                new FSFileWrite<span class="signature">()</span><span class="type-signature"></span>
+                new FSFileHash<span class="signature">()</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -165,9 +163,9 @@
 
     
         <p class="tag-source">
-            <a href="fs-file.write.class.ts.html" class="button">View Source</a>
+            <a href="fs-file.hash.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.write.class.ts.html">fs-file.write.class.ts</a>, <a href="fs-file.write.class.ts.html#line6">line 6</a>
+                <a href="fs-file.hash.class.ts.html">fs-file.hash.class.ts</a>, <a href="fs-file.hash.class.ts.html#line7">line 7</a>
             </span>
         </p>
     
@@ -209,7 +207,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="FSFileWrite.html">FSFileWrite</a></dt>
+            <dt><a href="FSFileHash.html">FSFileHash</a></dt>
             <dd></dd>
         </dl>
     
@@ -231,8 +229,8 @@
 
 
     
-    <h4 class="name" id="appendFile">
-        <a class="href-link" href="#appendFile">#</a>
+    <h4 class="name" id="hash">
+        <a class="href-link" href="#hash">#</a>
         
             
                 <span class='tag'>async</span>
@@ -240,17 +238,13 @@
         
         <span class="code-name">
             
-                appendFile<span class="signature">(data, options)</span><span class="type-signature"></span>
+                hash<span class="signature">(algorithm, digestEnc)</span><span class="type-signature"></span>
             
         </span>
     </h4>
     
 
     
-    
-    <div class="description">
-        Asynchronously append data to a file, creating the file if it does not yet exist.
-    </div>
     
 
 
@@ -287,7 +281,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>data</code></td>
+      <td class="name"><code>algorithm</code></td>
   
 
   <td class="type">
@@ -298,7 +292,7 @@
 
   
 
-  <td class="description last">string or Buffer to append</td>
+  <td class="description last"></td>
 </tr>
 
 
@@ -307,7 +301,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>options</code></td>
+      <td class="name"><code>digestEnc</code></td>
   
 
   <td class="type">
@@ -364,9 +358,9 @@
 
     
         <p class="tag-source">
-            <a href="fs-file.write.class.ts.html" class="button">View Source</a>
+            <a href="fs-file.hash.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.write.class.ts.html">fs-file.write.class.ts</a>, <a href="fs-file.write.class.ts.html#line42">line 42</a>
+                <a href="fs-file.hash.class.ts.html">fs-file.hash.class.ts</a>, <a href="fs-file.hash.class.ts.html#line16">line 16</a>
             </span>
         </p>
     
@@ -398,151 +392,8 @@
 
 
     
-    <h4 class="name" id="createWriteStream">
-        <a class="href-link" href="#createWriteStream">#</a>
-        
-        <span class="code-name">
-            
-                createWriteStream<span class="signature">(options)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        Creates standart node fs WriteStream for this path.
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>options</code></td>
-  
-
-  <td class="type">
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">node fs.createWriteStream options</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="fs-file.write.class.ts.html" class="button">View Source</a>
-            <span>
-                <a href="fs-file.write.class.ts.html">fs-file.write.class.ts</a>, <a href="fs-file.write.class.ts.html#line34">line 34</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="json">
-        <a class="href-link" href="#json">#</a>
+    <h4 class="name" id="md4">
+        <a class="href-link" href="#md4">#</a>
         
             
                 <span class='tag'>async</span>
@@ -550,17 +401,13 @@
         
         <span class="code-name">
             
-                json<span class="signature">(obj)</span><span class="type-signature"></span>
+                md4<span class="signature">(digestEnc)</span><span class="type-signature"></span>
             
         </span>
     </h4>
     
 
     
-    
-    <div class="description">
-        Serialize onject to JSON and writes it to file
-    </div>
     
 
 
@@ -597,7 +444,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>obj</code></td>
+      <td class="name"><code>digestEnc</code></td>
   
 
   <td class="type">
@@ -608,7 +455,7 @@
 
   
 
-  <td class="description last">object to serialize</td>
+  <td class="description last"></td>
 </tr>
 
 
@@ -654,9 +501,9 @@
 
     
         <p class="tag-source">
-            <a href="fs-file.write.class.ts.html" class="button">View Source</a>
+            <a href="fs-file.hash.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.write.class.ts.html">fs-file.write.class.ts</a>, <a href="fs-file.write.class.ts.html#line27">line 27</a>
+                <a href="fs-file.hash.class.ts.html">fs-file.hash.class.ts</a>, <a href="fs-file.hash.class.ts.html#line29">line 29</a>
             </span>
         </p>
     
@@ -688,8 +535,8 @@
 
 
     
-    <h4 class="name" id="txt">
-        <a class="href-link" href="#txt">#</a>
+    <h4 class="name" id="md5">
+        <a class="href-link" href="#md5">#</a>
         
             
                 <span class='tag'>async</span>
@@ -697,17 +544,13 @@
         
         <span class="code-name">
             
-                txt<span class="signature">(txt)</span><span class="type-signature"></span>
+                md5<span class="signature">(digestEnc)</span><span class="type-signature"></span>
             
         </span>
     </h4>
     
 
     
-    
-    <div class="description">
-        Writes string to file
-    </div>
     
 
 
@@ -744,7 +587,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>txt</code></td>
+      <td class="name"><code>digestEnc</code></td>
   
 
   <td class="type">
@@ -755,7 +598,7 @@
 
   
 
-  <td class="description last">content to write</td>
+  <td class="description last"></td>
 </tr>
 
 
@@ -801,9 +644,438 @@
 
     
         <p class="tag-source">
-            <a href="fs-file.write.class.ts.html" class="button">View Source</a>
+            <a href="fs-file.hash.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.write.class.ts.html">fs-file.write.class.ts</a>, <a href="fs-file.write.class.ts.html#line14">line 14</a>
+                <a href="fs-file.hash.class.ts.html">fs-file.hash.class.ts</a>, <a href="fs-file.hash.class.ts.html#line36">line 36</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="sha1">
+        <a class="href-link" href="#sha1">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                sha1<span class="signature">(digestEnc)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>digestEnc</code></td>
+  
+
+  <td class="type">
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="fs-file.hash.class.ts.html" class="button">View Source</a>
+            <span>
+                <a href="fs-file.hash.class.ts.html">fs-file.hash.class.ts</a>, <a href="fs-file.hash.class.ts.html#line43">line 43</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="sha256">
+        <a class="href-link" href="#sha256">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                sha256<span class="signature">(digestEnc)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>digestEnc</code></td>
+  
+
+  <td class="type">
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="fs-file.hash.class.ts.html" class="button">View Source</a>
+            <span>
+                <a href="fs-file.hash.class.ts.html">fs-file.hash.class.ts</a>, <a href="fs-file.hash.class.ts.html#line50">line 50</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="sha512">
+        <a class="href-link" href="#sha512">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                sha512<span class="signature">(digestEnc)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>digestEnc</code></td>
+  
+
+  <td class="type">
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="fs-file.hash.class.ts.html" class="button">View Source</a>
+            <span>
+                <a href="fs-file.hash.class.ts.html">fs-file.hash.class.ts</a>, <a href="fs-file.hash.class.ts.html#line57">line 57</a>
             </span>
         </p>
     

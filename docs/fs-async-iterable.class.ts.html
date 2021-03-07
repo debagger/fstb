@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#envPath">envPath</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileHash.html">FSFileHash</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#envPath">envPath</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#range">range</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
                 
             </nav>
         </div>
@@ -94,9 +94,11 @@ export class FSAsyncIterable&lt;T> implements AsyncIterable&lt;T> {
   [Symbol.asyncIterator]() {
     return this.iterable;
   }
+
   /**
    * Transform input items
-   * @param callback - async function (must return Promise), which transform input item to output item
+   * @param callback - async function (must return Promise),
+   * which transform input item to output item
    */
   map&lt;P>(callback: (item: T) => Promise&lt;P>) {
     const iterable = this.iterable;
@@ -143,11 +145,24 @@ export class FSAsyncIterable&lt;T> implements AsyncIterable&lt;T> {
   /**
    * The forEach() method executes a provided function once for each array element
    * @param callback - async function (must return Promise).
+   * @param parallel - max items, that can be processed at same time. Optional parameter, equals 1 by default
    */
-  async forEach(callback: (item: T) => Promise&lt;void>) {
+  async forEach(callback: (item: T) => Promise&lt;void>, parallel: number = 1) {
+    const activePromises = new Set();
     for await (const item of this.iterable) {
-      await callback(item);
+      const currentPromise = callback(item);
+      activePromises.add(currentPromise);
+      currentPromise
+        .catch(_ => {
+          /* do nothing */
+        })
+        .finally(() => {
+          activePromises.delete(currentPromise);
+        });
+
+      if (activePromises.size >= parallel) await Promise.race(activePromises);
     }
+    await Promise.all(activePromises);
   }
   /**
    *The toArray() method collect itertor items to array.

@@ -109,7 +109,13 @@ export const envPath = (envVariableName: string, fallbackValue?: string): FSPath
   if (fallbackValue) return FSPath(fallbackValue);
   throw Error(`Not found process.env[${envVariableName}] and fallback value didnt provided.`);
 };
-
+/**
+ * Returns FSAsyncIterator that 
+ * takes in a starting index and ending index then iterates 
+ * thru all integers from start to end
+ * @param from - start index
+ * @param to - end index
+ */
 export const range = (from: number, to: number) => {
   const rangeGenerator = async function*() {
     for (let index = from; index <= to; index++) {
