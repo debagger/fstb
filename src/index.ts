@@ -110,8 +110,8 @@ export const envPath = (envVariableName: string, fallbackValue?: string): FSPath
   throw Error(`Not found process.env[${envVariableName}] and fallback value didnt provided.`);
 };
 /**
- * Returns FSAsyncIterator that 
- * takes in a starting index and ending index then iterates 
+ * Returns FSAsyncIterator that
+ * takes in a starting index and ending index then iterates
  * thru all integers from start to end
  * @param from - start index
  * @param to - end index
