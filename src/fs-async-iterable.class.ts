@@ -65,12 +65,17 @@ export class FSAsyncIterable<T> implements AsyncIterable<T> {
     for await (const item of this.iterable) {
       const currentPromise = callback(item);
       activePromises.add(currentPromise);
-      currentPromise.finally(() => {
-        activePromises.delete(currentPromise);
-      });
+      currentPromise
+        .catch(_ => {
+          /* do nothing */
+        })
+        .finally(() => {
+          activePromises.delete(currentPromise);
+        });
+
       if (activePromises.size >= parallel) await Promise.race(activePromises);
     }
-    await Promise.allSettled(activePromises);
+    await Promise.all(activePromises);
   }
   /**
    *The toArray() method collect itertor items to array.
