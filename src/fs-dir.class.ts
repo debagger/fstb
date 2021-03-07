@@ -6,9 +6,9 @@ import { FSPath, FSPathType } from '.';
 
 const readDirPromise = (path: string) =>
   new Promise<Dirent[]>((resolve, reject) => {
-    readdir(path, { withFileTypes: true }, (err, files) => {
+    readdir(path, { withFileTypes: true }, (err, dirents) => {
       if (err) return reject(err);
-      resolve(files);
+      resolve(dirents);
     });
   });
 
