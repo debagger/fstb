@@ -12,7 +12,7 @@ export class FSAsyncIterable<T> implements AsyncIterable<T> {
    * Transform input items
    * @param callback - async function (must return Promise),
    * which transform input item to output item
-   * @param parallel - number of callbacks runs in parallel 
+   * @param parallel - number of callbacks runs in parallel
    */
   map<P>(callback: (item: T) => Promise<P>, parallel: number = 1) {
     const iterable = this.iterable;
@@ -52,7 +52,7 @@ export class FSAsyncIterable<T> implements AsyncIterable<T> {
   /**
    * Pass items only when callback returns true.
    * @param callback - async function (must return Promise).
-   * @param parallel - number of callbacks runs in parallel 
+   * @param parallel - number of callbacks runs in parallel
    */
   filter(callback: (item: T) => Promise<boolean>, parallel: number = 1) {
     const iterable = this.iterable;

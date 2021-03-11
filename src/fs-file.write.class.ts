@@ -2,7 +2,7 @@ import { writeFile, createWriteStream, appendFile, WriteFileOptions, WriteStream
 /**
  * Contains methods that write to file
  */
-export interface PromiseLikeWriteStream extends WriteStream, PromiseLike<void>{}
+export interface PromiseLikeWriteStream extends WriteStream, PromiseLike<void> {}
 
 export class FSFileWrite {
   constructor(public readonly path: string) {}
