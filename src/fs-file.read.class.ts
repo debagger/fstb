@@ -118,7 +118,7 @@ export class FSFileRead {
       const firstlineres = await iter.next();
       if (!firstlineres.done) {
         const firstline = firstlineres.value;
-        for await (const line of iter) {
+        for await (const line of iter as any) {
           yield firstline.reduce((obj, key, index) => {
             obj[key] = line[index];
             return obj;
