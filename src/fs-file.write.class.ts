@@ -2,6 +2,8 @@ import { writeFile, createWriteStream, appendFile, WriteFileOptions, WriteStream
 /**
  * Contains methods that write to file
  */
+export interface PromiseLikeWriteStream extends WriteStream, PromiseLike<void>{}
+
 export class FSFileWrite {
   constructor(public readonly path: string) {}
 
@@ -32,7 +34,7 @@ export class FSFileWrite {
    * @returns thenable stream, which resolves on stream close
    */
   createWriteStream(options?: SecondArgument<typeof createWriteStream>) {
-    const stream = createWriteStream(this.path, options) as WriteStream & PromiseLike<void>;
+    const stream = createWriteStream(this.path, options) as PromiseLikeWriteStream;
     const promise = new Promise<void>((resolve, reject) => {
       stream.on('close', () => {
         resolve();
