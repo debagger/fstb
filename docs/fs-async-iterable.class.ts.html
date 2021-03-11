@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileHash.html">FSFileHash</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSFileWrite.html">FSFileWrite</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#envPath">envPath</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#range">range</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="FSAsyncIterable.html">FSAsyncIterable</a></li><li><a href="FSDir.html">FSDir</a></li><li><a href="FSDirent.html">FSDirent</a></li><li><a href="FSFile.html">FSFile</a></li><li><a href="FSFileHash.html">FSFileHash</a></li><li><a href="FSFileRead.html">FSFileRead</a></li><li><a href="FSIterable.html">FSIterable</a></li></ul><h3>Interfaces</h3><ul><li><a href="PromiseLikeWriteStream.html">PromiseLikeWriteStream</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cwd">cwd</a></li><li><a href="global.html#dirname">dirname</a></li><li><a href="global.html#envPath">envPath</a></li><li><a href="global.html#FSPath">FSPath</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#mkdtemp">mkdtemp</a></li><li><a href="global.html#range">range</a></li><li><a href="global.html#tmp">tmp</a></li></ul></div>
                 
             </nav>
         </div>
@@ -89,23 +89,49 @@
  * This is util class not inteded to use directly, It used for iterate through dirents.
  */
 export class FSAsyncIterable&lt;T> implements AsyncIterable&lt;T> {
-  constructor(private readonly iterable: AsyncGenerator&lt;T>) {}
+  constructor(private readonly iterable: AsyncIterable&lt;T>) {}
 
   [Symbol.asyncIterator]() {
-    return this.iterable;
+    return this.iterable[Symbol.asyncIterator]();
   }
 
   /**
    * Transform input items
    * @param callback - async function (must return Promise),
    * which transform input item to output item
+   * @param parallel - number of callbacks runs in parallel
    */
-  map&lt;P>(callback: (item: T) => Promise&lt;P>) {
+  map&lt;P>(callback: (item: T) => Promise&lt;P>, parallel: number = 1) {
     const iterable = this.iterable;
     const mapAsyncGenerator = async function*() {
+      const pending = new Set&lt;Promise&lt;P>>();
+      const finished = new Set&lt;Promise&lt;P>>();
       for await (const item of iterable) {
-        yield await callback(item);
+        const current = callback(item);
+        pending.add(current);
+        current
+          .catch(() => {
+            /* do nothing */
+          })
+          .finally(() => {
+            pending.delete(current);
+            finished.add(current);
+          });
+        if (pending.size >= parallel) await Promise.race(pending);
+
+        for (const item of Array.from(finished)) {
+          yield item;
+          finished.delete(item);
+        }
       }
+      while (pending.size > 0) {
+        await Promise.race(pending);
+        for (const item of Array.from(finished)) {
+          yield item;
+          finished.delete(item);
+        }
+      }
+      yield* finished;
     };
     return new FSAsyncIterable(mapAsyncGenerator());
   }
@@ -113,13 +139,41 @@ export class FSAsyncIterable&lt;T> implements AsyncIterable&lt;T> {
   /**
    * Pass items only when callback returns true.
    * @param callback - async function (must return Promise).
+   * @param parallel - number of callbacks runs in parallel
    */
-  filter(callback: (item: T) => Promise&lt;boolean>) {
+  filter(callback: (item: T) => Promise&lt;boolean>, parallel: number = 1) {
     const iterable = this.iterable;
     const filterAsyncGenerator = async function*() {
+      const pending = new Set&lt;Promise&lt;boolean>>();
+      const finished = new Set&lt;T>();
       for await (const item of iterable) {
-        if (await callback(item)) yield item;
+        const current = callback(item);
+        pending.add(current);
+        current
+          .then(res => {
+            if (res) finished.add(item);
+          })
+          .catch(() => {
+            /* do nothing */
+          })
+          .finally(() => {
+            pending.delete(current);
+          });
+        if (pending.size >= parallel) await Promise.race(pending);
+
+        for (const item of Array.from(finished)) {
+          yield item;
+          finished.delete(item);
+        }
       }
+      while (pending.size > 0) {
+        await Promise.race(pending);
+        for (const item of Array.from(finished)) {
+          yield item;
+          finished.delete(item);
+        }
+      }
+      yield* finished;
     };
     return new FSAsyncIterable(filterAsyncGenerator());
   }
