@@ -7,14 +7,22 @@ const rl = require('readline');
 (async function() {
   const sleep = time => new Promise(resolve => setTimeout(resolve, time));
   try {
-  await range(0, 100).forEach(async i => {
-    await sleep(Math.floor(Math.random() * 1000));
-    if(i > 8) throw Error("Its > 8");
-    console.log(i);
-  }, 10);
-} catch (error) {
- console.log("Catch " + error.message)   
-}
+    await range(1, 10)
+      .map(async i => {
+        await sleep(1000/i);
+        return i;
+      }, 10)
+      .filter(async i => {
+        return i % 2;
+      }, 5)
+      .forEach(async i => {
+        await sleep(100);
+        // if(i > 8) throw Error("Its > 8");
+        console.log(i);
+      }, 2);
+  } catch (error) {
+    console.log('Catch ' + error.message);
+  }
   // const stream = cwd['hashlist.csv']()
   //   .asFile()
   //   .write.createWriteStream({ autoClose: true });
