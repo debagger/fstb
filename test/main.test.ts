@@ -3,6 +3,7 @@ import { join } from 'path';
 import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
 import { EOL } from 'os';
+import { createHash } from 'crypto';
 const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 
 const strSort = (a: string, b: string) => {
@@ -289,5 +290,35 @@ describe('FSPath', () => {
     const actual = await file.read.lineByLine().toArray();
     expect(actual).toEqual(expected);
     await file.unlink();
+  });
+
+  it('can use readstream as promise', async () => {
+    const tempDir = await mkdtemp('FSTBTEST');
+    console.log(tempDir.path);
+    const tempfile = tempDir.fspath['tempfile']().asFile();
+    try {
+      const ws = tempfile.write.createWriteStream();
+      const hsum_write = createHash('md5');
+      for (let index = 0; index < 100_000; index++) {
+        const chunk = Math.floor(Math.random() * 10000000).toString();
+        hsum_write.update(chunk);
+        ws.write(chunk);
+      }
+      ws.end();
+      await ws;
+      const expected = hsum_write.digest('hex');
+
+      const hsum_read = createHash('md5');
+      const rs = tempfile.read.createReadStream();
+      rs.on('data', chunk => hsum_read.update(chunk));
+      await rs;
+
+      const actual = hsum_read.digest('hex');
+      expect(actual).toBe(expected);
+    } catch (error) {
+      throw error;
+    } finally {
+      await tempDir.rimraf();
+    }
   });
 });

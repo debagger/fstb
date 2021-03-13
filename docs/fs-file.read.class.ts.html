@@ -85,7 +85,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { readFile, createReadStream } from 'fs';
+            <pre class="prettyprint source linenums"><code>import { readFile, createReadStream, ReadStream } from 'fs';
 import { createInterface } from 'readline';
 import { FSAsyncIterable } from './fs-async-iterable.class';
 import { FSIterable } from './fs-iterable.class';
@@ -205,7 +205,7 @@ export class FSFileRead {
       const firstlineres = await iter.next();
       if (!firstlineres.done) {
         const firstline = firstlineres.value;
-        for await (const line of iter) {
+        for await (const line of iter as any) {
           yield firstline.reduce((obj, key, index) => {
             obj[key] = line[index];
             return obj;
@@ -215,8 +215,29 @@ export class FSFileRead {
     };
     return new FSAsyncIterable(reader());
   }
+  
+/**
+ * Open stream for read from file. Return stream, which can be awaitable while stream closed.
+ * 
+ * @param options - standard Node fs.createReadStream options
+ * @returns {PromiseLikeReadStream} - work as standart node ReadStream, but can act as 
+ * Pomise wich resolves on stream 'close' event
+ */
+  public createReadStream(options?: SecondArgument&lt;typeof createReadStream>): PromiseLikeReadStream{
+    const stream = createReadStream(this.path, options) as PromiseLikeReadStream;
+    const promise = new Promise&lt;void>((resolve, reject) => {
+      stream.on('close', () => {
+        resolve();
+      });
+      stream.on('error', err => reject(err));
+    });
+    stream.then = promise.then.bind(promise);
+    return stream;
+  }
 }
-</code></pre>
+
+type SecondArgument&lt;T> = T extends (arg1: any, arg2: infer U, ...args: any[]) => any ? U : any;
+export interface PromiseLikeReadStream extends ReadStream, PromiseLike&lt;void> {}</code></pre>
         </article>
     </section>
 
