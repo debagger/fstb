@@ -109,10 +109,10 @@ export class FSDir {
    * @param recursive - if recursive is true, the first directory path created
    */
   public async mkdir(recursive: boolean = false) {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<FSDir>((resolve, reject) => {
       mkdir(this.path, { recursive }, err => {
         if (err) return reject(err);
-        resolve();
+        resolve(this);
       });
     });
   }

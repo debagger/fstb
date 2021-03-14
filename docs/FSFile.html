@@ -367,7 +367,7 @@
         <p class="tag-source">
             <a href="fs-file.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line121">line 121</a>
+                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line161">line 161</a>
             </span>
         </p>
     
@@ -505,7 +505,7 @@
         <p class="tag-source">
             <a href="fs-file.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line141">line 141</a>
+                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line181">line 181</a>
             </span>
         </p>
     
@@ -643,7 +643,7 @@
         <p class="tag-source">
             <a href="fs-file.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line114">line 114</a>
+                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line154">line 154</a>
             </span>
         </p>
     
@@ -797,7 +797,7 @@
         <p class="tag-source">
             <a href="fs-file.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line128">line 128</a>
+                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line168">line 168</a>
             </span>
         </p>
     
@@ -951,7 +951,7 @@
         <p class="tag-source">
             <a href="fs-file.class.ts.html" class="button">View Source</a>
             <span>
-                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line135">line 135</a>
+                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line175">line 175</a>
             </span>
         </p>
     
@@ -971,6 +971,226 @@
         <div class='vertical-section'>
             <h1>Methods</h1>
             <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="copyTo">
+        <a class="href-link" href="#copyTo">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                copyTo<span class="signature">(dest, flags)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="FSFile.html">FSFile</a>>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Copy file. If dest is FSDir, copy file in it with source name.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>dest</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">string</span>
+|
+
+<span class="param-type"><a href="FSDir.html">FSDir</a></span>
+|
+
+<span class="param-type"><a href="FSFile.html">FSFile</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>flags</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">number</span>
+
+
+  
+  </td>
+
+  
+
+  
+      <td class="default">
+      
+          0
+      
+      </td>
+  
+
+  <td class="description last">is an optional integer that specifies the behavior of the copy operation.It is possible to create a mask consisting of the bitwise OR of two or more values(e.g. fs.constants.COPYFILE_EXCL | fs.constants.COPYFILE_FICLONE).* fs.constants.COPYFILE_EXCL: The copy operation will fail if dest already exists.* fs.constants.COPYFILE_FICLONE: The copy operation will attempt to create a copy-on-write reflink.If the platform does not support copy-on-write, then a fallback copy mechanism is used.* fs.constants.COPYFILE_FICLONE_FORCE: The copy operation will attempt to create acopy-on-write reflink. If the platform does not support copy-on-write, then the operation will fail.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="fs-file.class.ts.html" class="button">View Source</a>
+            <span>
+                <a href="fs-file.class.ts.html">fs-file.class.ts</a>, <a href="fs-file.class.ts.html#line114">line 114</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>return FSFile of destination file</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Promise.&lt;<a href="FSFile.html">FSFile</a>></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
             
                 <div class="member">
 

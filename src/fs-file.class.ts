@@ -1,4 +1,4 @@
-import { stat, Stats, access, constants, unlink } from 'fs';
+import { stat, Stats, access, constants, unlink, copyFile } from 'fs';
 import { basename, dirname } from 'path';
 import { FSFileWrite } from './fs-file.write.class';
 import { FSFileRead } from './fs-file.read.class';
@@ -98,6 +98,41 @@ export class FSFile {
       unlink(this.path, err => {
         if (err) return reject(err);
         resolve();
+      });
+    });
+  }
+  /**
+   * Copy file. If dest is FSDir, copy file in it with source name.
+   * @param {string | FSDir | FSFile} dest
+   * @param {number} flags is an optional integer that specifies the behavior of the copy operation.
+   * It is possible to create a mask consisting of the bitwise OR of two or more values
+   * (e.g. fs.constants.COPYFILE_EXCL | fs.constants.COPYFILE_FICLONE).
+   * * fs.constants.COPYFILE_EXCL: The copy operation will fail if dest already exists.
+   * * fs.constants.COPYFILE_FICLONE: The copy operation will attempt to create a copy-on-write reflink.
+   * If the platform does not support copy-on-write, then a fallback copy mechanism is used.
+   * * fs.constants.COPYFILE_FICLONE_FORCE: The copy operation will attempt to create a
+   * copy-on-write reflink. If the platform does not support copy-on-write, then the operation will fail.
+   * @returns {Promise<FSFile>} return FSFile of destination file
+   */
+  public async copyTo(dest: string | FSDir | FSFile, flags: number = 0): Promise<FSFile> {
+    let destPath: string;
+    if (typeof dest === 'string') {
+      destPath = dest;
+    } else if (dest instanceof FSDir) {
+      destPath = dest.fspath[this.name]().path;
+    } else if (dest instanceof FSFile) {
+      destPath = dest.path;
+    } else {
+      throw Error("Wrong 'dest' argument. Must be string or FSDir or FSFile.");
+    }
+    return new Promise<FSFile>((resolve, reject) => {
+      copyFile(this.path, destPath, flags, err => {
+        if (err) return reject(err);
+        if (dest instanceof FSFile) {
+          resolve(dest);
+        } else {
+          resolve(new FSFile(destPath));
+        }
       });
     });
   }

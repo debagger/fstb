@@ -294,7 +294,6 @@ describe('FSPath', () => {
 
   it('can use readstream as promise', async () => {
     const tempDir = await mkdtemp('FSTBTEST');
-    console.log(tempDir.path);
     const tempfile = tempDir.fspath['tempfile']().asFile();
     try {
       const ws = tempfile.write.createWriteStream();
@@ -315,6 +314,64 @@ describe('FSPath', () => {
 
       const actual = hsum_read.digest('hex');
       expect(actual).toBe(expected);
+    } catch (error) {
+      throw error;
+    } finally {
+      await tempDir.rimraf();
+    }
+  });
+
+  it('copy file to dir', async () => {
+    const tempDir = await mkdtemp('FSTBTEST');
+    try {
+      const srcDir = await tempDir.fspath
+        .srcdir()
+        .asDir()
+        .mkdir();
+
+      const dstDir = await tempDir.fspath
+        .dstdir()
+        .asDir()
+        .mkdir();
+
+      const srcfile = srcDir.fspath['tempfile']().asFile();
+      await srcfile.write.txt('File copy test');
+      const expectedHash = await srcfile.hash.md5();
+      const dstfile = await srcfile.copyTo(dstDir);
+      expect(srcfile.name).toBe(dstfile.name);
+      const actualHash = await dstfile.hash.md5();
+
+      expect(expectedHash).toBe(actualHash);
+    } catch (error) {
+      throw error;
+    } finally {
+      await tempDir.rimraf();
+    }
+  });
+
+  it('copy file to FSFile', async () => {
+    const tempDir = await mkdtemp('FSTBTEST');
+    try {
+      const srcDir = await tempDir.fspath
+        .srcdir()
+        .asDir()
+        .mkdir();
+
+      const dstDir = await tempDir.fspath
+        .dstdir()
+        .asDir()
+        .mkdir();
+
+      const srcfile = srcDir.fspath['tempfile']().asFile();
+      await srcfile.write.txt('File copy test');
+      const expectedHash = await srcfile.hash.md5();
+      const dstfilename = 'dstfile';
+      const dstfile = dstDir.fspath[dstfilename]().asFile();
+      await srcfile.copyTo(dstfile);
+      expect(dstfile.name).toBe(dstfilename);
+      const actualHash = await dstfile.hash.md5();
+
+      expect(expectedHash).toBe(actualHash);
     } catch (error) {
       throw error;
     } finally {

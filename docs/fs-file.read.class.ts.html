@@ -215,15 +215,15 @@ export class FSFileRead {
     };
     return new FSAsyncIterable(reader());
   }
-  
-/**
- * Open stream for read from file. Return stream, which can be awaitable while stream closed.
- * 
- * @param options - standard Node fs.createReadStream options
- * @returns {PromiseLikeReadStream} - work as standart node ReadStream, but can act as 
- * Pomise wich resolves on stream 'close' event
- */
-  public createReadStream(options?: SecondArgument&lt;typeof createReadStream>): PromiseLikeReadStream{
+
+  /**
+   * Open stream for read from file. Return stream, which can be awaitable while stream closed.
+   *
+   * @param options - standard Node fs.createReadStream options
+   * @returns {PromiseLikeReadStream} - work as standart node ReadStream, but can act as
+   * Pomise wich resolves on stream 'close' event
+   */
+  public createReadStream(options?: SecondArgument&lt;typeof createReadStream>): PromiseLikeReadStream {
     const stream = createReadStream(this.path, options) as PromiseLikeReadStream;
     const promise = new Promise&lt;void>((resolve, reject) => {
       stream.on('close', () => {
@@ -237,7 +237,8 @@ export class FSFileRead {
 }
 
 type SecondArgument&lt;T> = T extends (arg1: any, arg2: infer U, ...args: any[]) => any ? U : any;
-export interface PromiseLikeReadStream extends ReadStream, PromiseLike&lt;void> {}</code></pre>
+export interface PromiseLikeReadStream extends ReadStream, PromiseLike&lt;void> {}
+</code></pre>
         </article>
     </section>
 
