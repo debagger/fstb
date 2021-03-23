@@ -386,7 +386,7 @@ describe('FSPath', () => {
       .asDir()
       .mkdir();
 
-    let destRoot:FSDir;
+    let destRoot: FSDir;
 
     let parent = srcRoot;
     await range(1, 10).forEach(async dirindex => {
@@ -406,14 +406,12 @@ describe('FSPath', () => {
     await srcRoot.subdirs(true).forEach(async dir => {
       await dir.files().forEach(async file => {
         const srcContent = await file.read.txt();
-        const dstPath = file.path.replace(srcRoot.path, destRoot.path)
+        const dstPath = file.path.replace(srcRoot.path, destRoot.path);
         const dstContent = await FSPath(dstPath)()
           .asFile()
           .read.txt();
         expect(dstContent).toBe(srcContent);
       });
     });
-
-
   });
 });

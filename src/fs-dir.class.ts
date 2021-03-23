@@ -194,6 +194,6 @@ export class FSDir {
     await this.subdirs().forEach(async srcSubdir => {
       await srcSubdir.copyTo(dir);
     });
-    return dir
+    return dir;
   }
 }
