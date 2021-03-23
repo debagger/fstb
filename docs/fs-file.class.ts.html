@@ -201,7 +201,7 @@ export class FSFile {
    * copy-on-write reflink. If the platform does not support copy-on-write, then the operation will fail.
    * @returns {Promise&lt;FSFile>} return FSFile of destination file
    */
-  public async copyTo(dest: string | FSDir | FSFile, flags: number = 0) {
+  public async copyTo(dest: string | FSDir | FSFile, flags: number = 0): Promise&lt;FSFile> {
     let destPath: string;
     if (typeof dest === 'string') {
       destPath = dest;
