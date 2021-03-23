@@ -9,7 +9,7 @@ export class FSFileRead {
   constructor(public readonly path: string) {}
 
   /**
-   * Returns all file content as string. On error trows throws
+   * Returns all file content as string. On error trows
    * NodeJS.ErrnoException
    * @returns {Promise<string>}
    */
