@@ -4,6 +4,7 @@ import { stat, readdir, Dirent, Stats } from 'fs';
 import { FSAsyncIterable } from '../src/fs-async-iterable.class';
 import { EOL } from 'os';
 import { createHash } from 'crypto';
+import { FSDir } from '../src/fs-dir.class';
 const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 
 const strSort = (a: string, b: string) => {
@@ -377,5 +378,42 @@ describe('FSPath', () => {
     } finally {
       await tempDir.rimraf();
     }
+  });
+
+  it('copy dir', async () => {
+    const srcDir = await mkdtemp('FSTBTEST');
+    const srcRoot = await srcDir.fspath['root']()
+      .asDir()
+      .mkdir();
+
+    let destRoot:FSDir;
+
+    let parent = srcRoot;
+    await range(1, 10).forEach(async dirindex => {
+      parent = await parent.fspath['subdir' + dirindex]()
+        .asDir()
+        .mkdir();
+      await range(1, 10).forEach(async fileindex => {
+        const filename = 'file' + fileindex + '.txt';
+        const file = parent.fspath[filename]().asFile();
+        await file.write.txt(`This is content of file ${filename}`);
+      });
+    });
+
+    const destDir = await mkdtemp('FSTBTEST');
+    destRoot = await srcRoot.copyTo(destDir);
+
+    await srcRoot.subdirs(true).forEach(async dir => {
+      await dir.files().forEach(async file => {
+        const srcContent = await file.read.txt();
+        const dstPath = file.path.replace(srcRoot.path, destRoot.path)
+        const dstContent = await FSPath(dstPath)()
+          .asFile()
+          .read.txt();
+        expect(dstContent).toBe(srcContent);
+      });
+    });
+
+
   });
 });
