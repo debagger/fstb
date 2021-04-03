@@ -69,10 +69,10 @@ export class FSFileWrite {
    * @param stream - input stream
    */
 
-  async writeFromStream(stream: ReadStream){
+  async writeFromStream(stream: ReadStream) {
     const target = this.createWriteStream();
     stream.pipe(target);
-    await target
+    await target;
   }
 }
 
