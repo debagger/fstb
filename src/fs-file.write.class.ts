@@ -1,4 +1,4 @@
-import { writeFile, createWriteStream, appendFile, WriteFileOptions, WriteStream } from 'fs';
+import { writeFile, createWriteStream, appendFile, WriteFileOptions, WriteStream, ReadStream } from 'fs';
 /**
  * Contains methods that write to file
  */
@@ -62,6 +62,17 @@ export class FSFileWrite {
         appendFile(this.path, data, cb);
       }
     });
+  }
+
+  /**
+   * Writes stream to file.
+   * @param stream - input stream
+   */
+
+  async writeFromStream(stream: ReadStream){
+    const target = this.createWriteStream();
+    stream.pipe(target);
+    await target
   }
 }
 
