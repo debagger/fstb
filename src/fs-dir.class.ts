@@ -182,13 +182,13 @@ export class FSDir {
    * @param targetDir - Directory in which will be copy current
    */
 
-  public async copyTo(targetDir: FSDir) {
+  public async copyTo(targetDir: FSDir ) {
     const dir = await targetDir.fspath[this.name]()
       .asDir()
       .mkdir();
 
     await this.files().forEach(async file => {
-      await file.copyTo(dir, constants.COPYFILE_EXCL);
+      await file.copyTo(dir, {COPYFILE_EXCL:true});
     });
 
     await this.subdirs().forEach(async srcSubdir => {
