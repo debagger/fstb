@@ -72,7 +72,7 @@ export class FSDir {
    * operators available. toArray operator can be used for resulting chain to array.
    * @param recursive - if true returns each subdir of any deep
    * @returns {FSAsyncIterable}
-   * @example <caption>Extratct all module names and versions from code>node_modules</caption>
+   * @example <caption>Extratct all module names and versions from node_modules</caption>
    * const { cwd } = require('fstb');
    * cwd
    *  .node_modules()
