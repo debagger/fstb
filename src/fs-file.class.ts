@@ -163,6 +163,11 @@ export class FSFile {
     });
   }
 
+  /**
+   * Moves file to destination directory
+   * @param {FSDir} destDir - destination directory
+   * @returns {Promise<FSFile>} - destination file
+   */
   public async moveTo(destDir: FSDir): Promise<FSFile> {
     return new Promise<FSFile>((resolve, reject) => {
       const dest = destDir.fspath[this.name]().asFile();

@@ -1619,7 +1619,7 @@
 
     <h5>Example</h5>
     
-        <p class="code-caption">Extratct all module names and versions from code>node_modules</p>
+        <p class="code-caption">Extratct all module names and versions from node_modules</p>
     
     
         <pre class="prettyprint"><code>const { cwd } = require('fstb');cwd .node_modules() .asDir() .subdirs(true) .map(async dir => dir.fspath['package.json']().asFile()) .filter(async package_json => await package_json.isReadable()) .map(async package_json => await package_json.read.json()) .forEach(async content => console.log(`${content.name}@${content.version}`));</code></pre>

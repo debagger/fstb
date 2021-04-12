@@ -123,10 +123,10 @@ export class FSFileWrite {
   createWriteStream(options?: SecondArgument&lt;typeof createWriteStream>) {
     const stream = createWriteStream(this.path, options) as PromiseLikeWriteStream;
     const promise = new Promise&lt;void>((resolve, reject) => {
-      stream.on('close', () => {
+      stream.once('close', () => {
         resolve();
       });
-      stream.on('error', err => reject(err));
+      stream.once('error', err => reject(err));
     });
     stream.then = promise.then.bind(promise);
     return stream;
@@ -156,10 +156,10 @@ export class FSFileWrite {
    * @param stream - input stream
    */
 
-  async writeFromStream(stream: ReadStream){
+  async writeFromStream(stream: ReadStream) {
     const target = this.createWriteStream();
     stream.pipe(target);
-    await target
+    await target;
   }
 }
 

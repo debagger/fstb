@@ -159,7 +159,7 @@ export class FSDir {
    * operators available. toArray operator can be used for resulting chain to array.
    * @param recursive - if true returns each subdir of any deep
    * @returns {FSAsyncIterable}
-   * @example &lt;caption>Extratct all module names and versions from code>node_modules&lt;/caption>
+   * @example &lt;caption>Extratct all module names and versions from node_modules&lt;/caption>
    * const { cwd } = require('fstb');
    * cwd
    *  .node_modules()
@@ -269,13 +269,13 @@ export class FSDir {
    * @param targetDir - Directory in which will be copy current
    */
 
-  public async copyTo(targetDir: FSDir ) {
+  public async copyTo(targetDir: FSDir) {
     const dir = await targetDir.fspath[this.name]()
       .asDir()
       .mkdir();
 
     await this.files().forEach(async file => {
-      await file.copyTo(dir, {COPYFILE_EXCL:true});
+      await file.copyTo(dir, { COPYFILE_EXCL: true });
     });
 
     await this.subdirs().forEach(async srcSubdir => {

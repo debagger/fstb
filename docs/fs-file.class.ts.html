@@ -85,7 +85,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { stat, Stats, access, constants, unlink, copyFile } from 'fs';
+            <pre class="prettyprint source linenums"><code>import { stat, Stats, access, constants, unlink, copyFile, rename } from 'fs';
 import { basename, dirname } from 'path';
 import { FSFileWrite } from './fs-file.write.class';
 import { FSFileRead } from './fs-file.read.class';
@@ -246,6 +246,21 @@ export class FSFile {
         } else {
           resolve(new FSFile(destPath));
         }
+      });
+    });
+  }
+
+  /**
+   * Moves file to destination directory
+   * @param {FSDir} destDir - destination directory
+   * @returns {Promise&lt;FSFile>} - destination file
+   */
+  public async moveTo(destDir: FSDir): Promise&lt;FSFile> {
+    return new Promise&lt;FSFile>((resolve, reject) => {
+      const dest = destDir.fspath[this.name]().asFile();
+      rename(dest.path, destDir.path, err => {
+        if (err) return reject(err);
+        resolve(dest);
       });
     });
   }
