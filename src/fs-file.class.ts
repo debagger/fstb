@@ -1,4 +1,4 @@
-import { stat, Stats, access, constants, unlink, copyFile } from 'fs';
+import { stat, Stats, access, constants, unlink, copyFile, rename } from 'fs';
 import { basename, dirname } from 'path';
 import { FSFileWrite } from './fs-file.write.class';
 import { FSFileRead } from './fs-file.read.class';
@@ -159,6 +159,16 @@ export class FSFile {
         } else {
           resolve(new FSFile(destPath));
         }
+      });
+    });
+  }
+
+  public async moveTo(destDir: FSDir): Promise<FSFile> {
+    return new Promise<FSFile>((resolve, reject) => {
+      const dest = destDir.fspath[this.name]().asFile();
+      rename(dest.path, destDir.path, err => {
+        if (err) return reject(err);
+        resolve(dest);
       });
     });
   }
