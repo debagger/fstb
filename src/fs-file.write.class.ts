@@ -36,10 +36,10 @@ export class FSFileWrite {
   createWriteStream(options?: SecondArgument<typeof createWriteStream>) {
     const stream = createWriteStream(this.path, options) as PromiseLikeWriteStream;
     const promise = new Promise<void>((resolve, reject) => {
-      stream.on('close', () => {
+      stream.once('close', () => {
         resolve();
       });
-      stream.on('error', err => reject(err));
+      stream.once('error', err => reject(err));
     });
     stream.then = promise.then.bind(promise);
     return stream;

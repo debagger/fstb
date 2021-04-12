@@ -45,7 +45,7 @@ export class FSFileRead {
     readLine.on('line', line => {
       iterable.push(line);
     });
-    readLine.on('close', () => {
+    readLine.once('close', () => {
       iterable.end();
     });
     return iterable;
@@ -139,10 +139,10 @@ export class FSFileRead {
   public createReadStream(options?: SecondArgument<typeof createReadStream>): PromiseLikeReadStream {
     const stream = createReadStream(this.path, options) as PromiseLikeReadStream;
     const promise = new Promise<void>((resolve, reject) => {
-      stream.on('close', () => {
+      stream.once('close', () => {
         resolve();
       });
-      stream.on('error', err => reject(err));
+      stream.once('error', err => reject(err));
     });
     stream.then = promise.then.bind(promise);
     return stream;
