@@ -177,4 +177,19 @@ export class FSFile {
       });
     });
   }
+
+  /**
+   * Rename file to target
+   * @param {string} targetName - name of target file 
+   * @returns {Promise<FSFile>} - renamed file
+   */
+  public async rename(targetName: string):Promise<FSFile>{
+    const targetFile = this.fsdir.fspath[targetName]().asFile()
+    return new Promise<FSFile>((resolve, reject)=>{
+      rename(this.path, targetFile.path, (err)=>{
+        if(err) return reject(err);
+        resolve(targetFile)
+      })
+    })
+  } 
 }
