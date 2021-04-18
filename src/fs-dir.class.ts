@@ -1,4 +1,4 @@
-import { Dirent, readdir, rmdir, mkdir, access, constants } from 'fs';
+import { Dirent, readdir, rmdir, mkdir, access, constants, rename } from 'fs';
 import { basename, join } from 'path';
 import { FSFile } from './fs-file.class';
 import { FSAsyncIterable } from './fs-async-iterable.class';
@@ -195,5 +195,20 @@ export class FSDir {
       await srcSubdir.copyTo(dir);
     });
     return dir;
+  }
+
+  /**
+   * Moves diretory to the new path
+   * @param targetDir - target directory
+   * @returns moved direrectory
+   */
+  public async moveTo(targetDir: FSDir): Promise<FSDir> {
+    const dir = targetDir.fspath[this.name]().asDir();
+    return new Promise((resolve, reject) => {
+      rename(this.path, dir.path, err => {
+        if (err) return reject(err);
+        resolve(dir);
+      });
+    });
   }
 }
