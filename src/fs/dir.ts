@@ -1,8 +1,8 @@
 import { Dirent, readdir, rmdir, mkdir, access, constants, rename } from 'fs';
 import { basename, join } from 'path';
-import { FSFile } from './fs-file.class';
-import { FSAsyncIterable } from './fs-async-iterable.class';
-import { FSPath, FSPathType } from '.';
+import { FSFile } from './file/index';
+import { FSAsyncIterable } from './asyncIterable';
+import { FSPath, FSPathType } from '..';
 
 const readDirPromise = (path: string) =>
   new Promise<Dirent[]>((resolve, reject) => {
@@ -27,7 +27,7 @@ export class FSDir {
    *
    * @param {string} path - valid filesystem path string
    */
-  constructor(public readonly path: string) {}
+  constructor(public readonly path: string) { }
 
   /**
    * Directory name
@@ -46,7 +46,7 @@ export class FSDir {
    * operators available. toArray operator can be used for resulting chain to array.
    * @returns {FSAsyncIterable<Dirent>}
    */
-  public dirents() {
+  public dirents(): FSAsyncIterable<Dirent> {
     return new FSAsyncIterable(direntsGen(this.path));
   }
 
@@ -55,7 +55,7 @@ export class FSDir {
    * operators available. toArray operator can be used for resulting chain to array.
    * @returns {FSAsyncIterable}
    */
-  public files() {
+  public files(): FSAsyncIterable {
     return this.dirents()
       .filter(async dirent => dirent.isFile())
       .map(async dirent => new FSFile(join(this.path, dirent.name)));

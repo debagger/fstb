@@ -1,15 +1,15 @@
 import { join, basename, sep } from 'path';
 import { mkdtemp as fsmkdtemp } from 'fs';
 import { homedir, tmpdir } from 'os';
-import { FSDir } from './fs-dir.class';
-import { FSFile } from './fs-file.class';
-import { FSAsyncIterable } from './fs-async-iterable.class';
+import { FSDir } from './fs/dir';
+import { FSFile } from './fs/file/index';
+import { FSAsyncIterable } from './fs/asyncIterable';
 
 /**
  * Represent dirent which can be converted to FSDir or FSFile.
  */
 export class FSDirent {
-  constructor(public readonly path: string) {}
+  constructor(public readonly path: string) { }
   public readonly name = basename(this.path);
 
   /**
@@ -49,7 +49,7 @@ export type FSPathType = {
  *
  * @param {string} path - start path
  */
-export const FSPath = function(path: string): FSPathType {
+export const FSPath = function (path: string): FSPathType {
   return new Proxy(() => new FSDirent(path), {
     get: (_, key: string) => FSPath(join(path, key)),
   }) as FSPathType;
@@ -117,7 +117,7 @@ export const envPath = (envVariableName: string, fallbackValue?: string): FSPath
  * @param to - end index
  */
 export const range = (from: number, to: number) => {
-  const rangeGenerator = async function*() {
+  const rangeGenerator = async function* () {
     for (let index = from; index <= to; index++) {
       yield index;
     }
