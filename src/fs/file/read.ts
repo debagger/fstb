@@ -1,12 +1,12 @@
 import { readFile, createReadStream, ReadStream } from 'fs';
 import { createInterface } from 'readline';
-import { FSAsyncIterable } from './fs-async-iterable.class';
-import { FSIterable } from './fs-iterable.class';
+import { FSAsyncIterable } from '../asyncIterable';
+import { FSIterable } from '../iterable';
 /**
  * Contains methods, that reads from file
  */
 export class FSFileRead {
-  constructor(public readonly path: string) {}
+  constructor(public readonly path: string) { }
 
   /**
    * Returns all file content as string. On error throws
@@ -89,7 +89,7 @@ export class FSFileRead {
       input: fileStream,
       crlfDelay: Infinity,
     });
-    const reader = async function*() {
+    const reader = async function* () {
       for await (const line of readLine) {
         yield line;
       }
@@ -114,7 +114,7 @@ export class FSFileRead {
    */
   public csvWithHeaderAsync(splitter: string): FSAsyncIterable<Record<string, string>> {
     const iter = this.csvArraysAsync(splitter)[Symbol.asyncIterator]();
-    const reader = async function*() {
+    const reader = async function* () {
       const firstlineres = await iter.next();
       if (!firstlineres.done) {
         const firstline = firstlineres.value;
@@ -150,4 +150,4 @@ export class FSFileRead {
 }
 
 type SecondArgument<T> = T extends (arg1: any, arg2: infer U, ...args: any[]) => any ? U : any;
-export interface PromiseLikeReadStream extends ReadStream, PromiseLike<void> {}
+export interface PromiseLikeReadStream extends ReadStream, PromiseLike<void> { }

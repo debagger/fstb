@@ -1,9 +1,9 @@
 import { stat, Stats, access, constants, unlink, copyFile, rename } from 'fs';
 import { basename, dirname } from 'path';
-import { FSFileWrite } from './fs-file.write.class';
-import { FSFileRead } from './fs-file.read.class';
-import { FSDir } from './fs-dir.class';
-import { FSFileHash } from './fs-file.hash.class';
+import { FSFileWrite } from './write';
+import { FSFileRead } from './read';
+import { FSDir } from '../dir';
+import { FSFileHash } from './hash';
 
 /**
  * Options that specifies the behavior of the copyTo operation
@@ -31,7 +31,7 @@ export type copyToOptions = {
  * Contains all methods to work with files.
  */
 export class FSFile {
-  constructor(public readonly path: string) {}
+  constructor(public readonly path: string) { }
 
   /**
    * Contains file name.
